@@ -28,25 +28,25 @@ function writeToFile(fileName, data) {
     const fs = require('fs')
     fileName = 'README.md' 
     let fileCreated = false
-    let i = 0
+    let i = -1
     let fileAmountLimit = 100
-    let existingFilesIndex = ''
 
     // checing if the file exists and updating the file name
     while(fileCreated === false && i < fileAmountLimit) {
-        if(i === fileAmountLimit) { console.log(colors.red('File limit reached. clear the output folder')); break }
+        if(i === fileAmountLimit) { console.log(c('File limit reached. clear the output folder to create more files','r')); break }
         try {
-            let subfix = i === 0 ? '' : `_${i}`
-            fileName = `README${subfix}.md`
+            let subfix = `_${i}`
+            fileName = i === -1 ? 'README.md' : `README${subfix}.md`
             fs.accessSync(`./output/${fileName}`, fs.F_OK)
-            existingFilesIndex += `${i},`
+            
         } catch (err) {
-            let firstNum = existingFilesIndex.split(',')[0]
-            let lastNum = existingFilesIndex.split(',').at(-1)
-            lastNum = lastNum === '' ? existingFilesIndex.split(',').at(-2) : lastNum
+            console.log(ln(),i)
 
-            console.log(colors.yellow(`Files REAME ${firstNum} to ${lastNum} already exists:`), )
-            console.log(ln(),colors.green(`Creating file ${fileName}`))
+            if(i === 0) { console.log(c(`File README.md already exists:`), ) }
+            if(i === 1) { console.log(c(`Files README.md and REAME_0.md already exists:`), ) }
+            if(i > 1) { console.log(c(`File REAME_0 to _${i-1} already exists:`), ) }
+
+            console.log(ln(),c(`Creating file ${fileName}`, 'y'))
             fileCreated = true
         }
         i++
