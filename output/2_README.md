@@ -1,1 +1,0 @@
-{"username":"test","github_username":"febres0492","email_address":"febres0492@gmaim.com","usage":"yes","license":"yes","contribution":"yes","features":"yes","technologies":"yes","acknowledgments":"yes"}
