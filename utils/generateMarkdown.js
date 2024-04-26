@@ -50,7 +50,7 @@ function renderLicenseLink(link) {
 // If there is no license, return an empty string
 function renderLicenseSection(license) {
     if (!license) { return '' }
-    const badge = badges.find(b => b.name.toLocaleLowerCase().startsWith(license.toLocaleLowerCase()))
+    const badge = badges.find(b => b.name === license)
 
     return `
         ## License
@@ -84,4 +84,4 @@ function generateMarkdown(name) {
     return ` # ${name} `
 }
 
-module.exports = generateMarkdown;
+module.exports = { generateMarkdown, badges };

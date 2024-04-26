@@ -1,19 +1,20 @@
 // TODO: Include packages needed for this application
 const inquirer = require('inquirer')
 const colors = require('colors')
-const generateMarkdown = require('./utils/generateMarkdown')
+const { generateMarkdown, badges } = require('./utils/generateMarkdown')
+
 
 // TODO: Create an array of questions for user input
 const questions = [
-    { type: 'input', message: 'What is your project name?',               name: 'project_name',    title: 'My Project' },
-    { type: 'input', message: 'What is your GitHub username?',            name: 'github_username', title: 'github_username' },
-    { type: 'input', message: 'What is your email address?',              name: 'email_address',   title: 'email_address' },
-    { type: 'input', message: 'Do you need a usage section?',             name: 'usage',           title: 'Usage' },
-    { type: 'input', message: 'Do you need a license section?',           name: 'license',         title: 'License' },
-    { type: 'input', message: 'Do you need a contribution section?',      name: 'contribution',    title: 'Contribution' },
-    { type: 'input', message: 'Do you need a features section?',          name: 'features',        title: 'Features' },
-    { type: 'input', message: 'Do you need a Technologies used section?', name: 'technologies',    title: 'Technologies' },
-    { type: 'input', message: 'Do you need a Acknowledgments section?',   name: 'acknowledgments', title: 'Acknowledgments' },
+    { type: 'input', message: 'What is your project name?'              , name: 'project_name'   , title: 'My Project' }     ,
+    { type: 'input', message: 'What is your GitHub username?'           , name: 'github_username', title: 'github_username' },
+    { type: 'input', message: 'What is your email address?'             , name: 'email_address'  , title: 'email_address' }  ,
+    { type: 'input', message: 'Do you need a usage section?'            , name: 'usage'          , title: 'Usage' }          ,
+    { type: 'input', message: 'Do you need a contribution section?'     , name: 'contribution'   , title: 'Contribution' }   ,
+    { type: 'input', message: 'Do you need a features section?'         , name: 'features'       , title: 'Features' }       ,
+    { type: 'input', message: 'Do you need a Technologies used section?', name: 'technologies'   , title: 'Technologies' }   ,
+    { type: 'input', message: 'Do you need a Acknowledgments section?'  , name: 'acknowledgments', title: 'Acknowledgments' },
+    { type: 'list' , message: 'License?:', name: 'license', title: 'License' , choices: ["No License", ...badges.map(badge => badge.name)] },
 ]
 
 // TODO: Create a function to write README file
@@ -58,12 +59,23 @@ function writeToFile(fileName, data) {
 }
 
 // TODO: Create a function to initialize app
-function init(input = '') {
+async function init(input = '') {
     let defaultQuestions = questions
-
     let defaultValues = {}
+    let mode = ''
 
-    if (input === 'default') {
+    // inquiring file creation mode
+    await inquirer.prompt([
+        {   type: "list",
+            message: "Default or Personalized mode?",
+            name: "mode",
+            choices: ["Default", "Personalized"], 
+        }
+    ])
+    .then((response) => mode = response.mode )
+
+    // skipping questions if in default mode
+    if (mode === 'Default') {
         defaultQuestions = [] 
         defaultValues = questions.reduce((acc, question) => {
             acc[question.name] = 'y' 
@@ -71,9 +83,10 @@ function init(input = '') {
         }, {})
     }
 
+    // inquiring user input
     inquirer.prompt(defaultQuestions)
     .then((res) => {
-        let response = (input === 'default') ? defaultValues : res
+        let response = (input === 'Default') ? defaultValues : res
         writeToFile('README.md', JSON.stringify(response, null, 2)) 
     })
 }
