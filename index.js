@@ -25,6 +25,7 @@ const questions = [
 // TODO: Create a function to write README file
 function writeToFile(fileName, data) {
     data = JSON.parse(data)
+    console.log(ln(),'data', data)
     const fs = require('fs')
     fileName = 'README.md' 
     let fileCreated = false
@@ -40,8 +41,8 @@ function writeToFile(fileName, data) {
             fs.accessSync(`./output/${fileName}`, fs.F_OK)
             
         } catch (err) {
-            console.log(ln(),i)
 
+            // loging what files exist
             if(i === 0) { console.log(c(`File README.md already exists:`), ) }
             if(i === 1) { console.log(c(`Files README.md and REAME_0.md already exists:`), ) }
             if(i > 1) { console.log(c(`File REAME_0 to _${i-1} already exists:`), ) }
@@ -55,9 +56,8 @@ function writeToFile(fileName, data) {
     // generating markdown
     let markdown = ''
     Object.entries(data).forEach(([key, value]) => {
-        console.log(ln(),key, value)
-
-        // if (value === 'yes'){ markdown += generateMarkdown(key) + '\n' }
+        const sections = [ 'project_name', 'usage', 'contribution', 'features', 'technologies', 'acknowledgments' ]
+        if (sections.includes(key) && value === 'yes') { markdown += generateMarkdown(key, value) + '\n\n' }
     })
 
     // writing to file
@@ -99,6 +99,7 @@ async function init(input = '') {
     // inquiring to create file
     inquirer.prompt(defaultQuestions)
     .then((res) => {
+        
         let response = (mode === 'Default') ? defaultValues : res
         console.log(ln(),'response', response)
         writeToFile('README.md', JSON.stringify(response, null, 2)) 

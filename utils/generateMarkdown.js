@@ -31,6 +31,11 @@ const badges = [
     { name: "Zlib", segment: "Zlib-lightgrey.svg", url: "https://opensource.org/licenses/Zlib" },
 ];
 
+const sectionsTitles = { 
+    project_name: 'MyProject', usage: 'Usage', contribution: 'Contribution', features: 'Features',
+    technologies: 'Technologies', acknowledgments: 'Acknowledgments',
+}
+
 //  ---------------------------------------------------------------      ---------------------------------------------------------------
 // TODO: Create a function that returns a license badge based on which license is passed in
 // If there is no license, return an empty string
@@ -63,25 +68,20 @@ function renderLicenseSection(license) {
 
 // TODO: Create a function to generate markdown for README
 function generateMarkdown(name) {
-    // console.log('Markdown data:', data)
     
     const sections = {
-        project_name: (val)=> `${val}`,
-        github_username: (val)=> `${val}`,
-        email_address: (val)=> `${val}`,
-        usage: (val)=> `${val}`,
-        license: (val)=> `${val}`,
-        contribution: (val)=> `${val}`,
-        features: (val)=> `${val}`,
-        technologies: (val)=> `${val}`,
-        acknowledgments: (val)=> `${val}`,
+        project_name:    (val)=> ` # ${sectionsTitles[val]} `,
+        usage:           (val)=> ` # ${sectionsTitles[val]} `,
+        license:         (val)=> ` # ${sectionsTitles[val]} `,
+        contribution:    (val)=> ` # ${sectionsTitles[val]} `,
+        features:        (val)=> ` # ${sectionsTitles[val]} `,
+        technologies:    (val)=> ` # ${sectionsTitles[val]} `,
+        acknowledgments: (val)=> ` # ${sectionsTitles[val]} `,
     }
 
-    // if(name in sections) {
-    //     return sections[name](name)
-    // }
-
-    return ` # ${name} `
+    if(name in sections) {
+        return sections[name](name)
+    }
 }
 
 function ln() {
