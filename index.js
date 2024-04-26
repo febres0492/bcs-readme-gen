@@ -1,22 +1,24 @@
 // TODO: Include packages needed for this application
 const inquirer = require('inquirer')
 const colors = require('colors')
+const generateMarkdown = require('./utils/generateMarkdown')
 
 // TODO: Create an array of questions for user input
 const questions = [
-    { type: 'input', message: 'What is your project name?', name: 'project_name', },
-    { type: 'input', message: 'What is your GitHub username?', name: 'github_username', },
-    { type: 'input', message: 'What is your email address?', name: 'email_address', },
-    { type: 'input', message: 'Do you need a usage section?', name: 'usage', },
-    { type: 'input', message: 'Do you need a license section?', name: 'license', },
-    { type: 'input', message: 'Do you need a contribution section?', name: 'contribution', },
-    { type: 'input', message: 'Do you need a features section?', name: 'features', },
-    { type: 'input', message: 'Do you need a Technologies used section?', name: 'technologies', },
-    { type: 'input', message: 'Do you need a Acknowledgments section?', name: 'acknowledgments', },
+    { type: 'input', message: 'What is your project name?',               name: 'project_name',    title: 'My Project' },
+    { type: 'input', message: 'What is your GitHub username?',            name: 'github_username', title: 'github_username' },
+    { type: 'input', message: 'What is your email address?',              name: 'email_address',   title: 'email_address' },
+    { type: 'input', message: 'Do you need a usage section?',             name: 'usage',           title: 'Usage' },
+    { type: 'input', message: 'Do you need a license section?',           name: 'license',         title: 'License' },
+    { type: 'input', message: 'Do you need a contribution section?',      name: 'contribution',    title: 'Contribution' },
+    { type: 'input', message: 'Do you need a features section?',          name: 'features',        title: 'Features' },
+    { type: 'input', message: 'Do you need a Technologies used section?', name: 'technologies',    title: 'Technologies' },
+    { type: 'input', message: 'Do you need a Acknowledgments section?',   name: 'acknowledgments', title: 'Acknowledgments' },
 ]
 
 // TODO: Create a function to write README file
 function writeToFile(fileName, data) {
+    data = JSON.parse(data)
     const fs = require('fs')
     fileName = 'README.md' 
     let fileCreated = false
@@ -36,15 +38,23 @@ function writeToFile(fileName, data) {
         i++
     }
 
-    console.log('data:', data)
+    let markdown = ''
+    console.log('data', data)
+    Object.entries(data).forEach(([key, value]) => {
+        if (value === 'y'){
+            const test = generateMarkdown(key)
+            console.log('test', test)
+            markdown += test + '\n'
+        }
+    })
 
-    fs.writeFile(`./output/${fileName}`, data, (err) => {
+    fs.writeFile(`./output/${fileName}`, markdown, (err) => {
         if(err) { console.log(`Error: ${err}`) } 
         else {
             console.log(`created ${fileName} file.`);
             fileCreated = true
         }
-    } )
+    })
 }
 
 // TODO: Create a function to initialize app
@@ -54,7 +64,6 @@ function init(input = '') {
     let defaultValues = {}
 
     if (input === 'default') {
-        console.log('Using default values for initialization.')
         defaultQuestions = [] 
         defaultValues = questions.reduce((acc, question) => {
             acc[question.name] = 'y' 
