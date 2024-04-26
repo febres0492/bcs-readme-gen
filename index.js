@@ -25,7 +25,7 @@ function writeToFile(fileName, data) {
     let i = 0
 
     // checing if the file exists and updating the file name
-    while(fileCreated === false && i < 10) {
+    while(fileCreated === false && i < 20) {
         try {
             let subfix = i === 0 ? '' : `_${i}`
             fileName = `README${subfix}.md`
@@ -67,7 +67,6 @@ function init(input = '') {
         defaultQuestions = [] 
         defaultValues = questions.reduce((acc, question) => {
             acc[question.name] = 'y' 
-            if (question.name === 'project_name') acc[question.name] = 'My Project' 
             return acc
         }, {})
     }
