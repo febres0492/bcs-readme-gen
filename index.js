@@ -1,20 +1,25 @@
 // TODO: Include packages needed for this application
 const inquirer = require('inquirer')
 const colors = require('colors')
-const { generateMarkdown, badges } = require('./utils/generateMarkdown')
+const { generateMarkdown, badges, ln } = require('./utils/generateMarkdown')
 
+// function to give text color
+function c(str, color = 'g'){ 
+    const opt = { r: 'red', g: 'green', y: 'yellow', b: 'blue' }
+    return colors[opt[color]](str) 
+}
 
 // TODO: Create an array of questions for user input
 const questions = [
-    { type: 'input', message: 'What is your project name?'              , name: 'project_name'   , title: 'My Project' }     ,
-    { type: 'input', message: 'What is your GitHub username?'           , name: 'github_username', title: 'github_username' },
-    { type: 'input', message: 'What is your email address?'             , name: 'email_address'  , title: 'email_address' }  ,
-    { type: 'input', message: 'Do you need a usage section?'            , name: 'usage'          , title: 'Usage' }          ,
-    { type: 'input', message: 'Do you need a contribution section?'     , name: 'contribution'   , title: 'Contribution' }   ,
-    { type: 'input', message: 'Do you need a features section?'         , name: 'features'       , title: 'Features' }       ,
-    { type: 'input', message: 'Do you need a Technologies used section?', name: 'technologies'   , title: 'Technologies' }   ,
-    { type: 'input', message: 'Do you need a Acknowledgments section?'  , name: 'acknowledgments', title: 'Acknowledgments' },
-    { type: 'list' , message: 'License?:', name: 'license', title: 'License' , choices: ["No License", ...badges.map(badge => badge.name)] },
+    { name: 'project_name'    , type: 'input', message: `What is your ${c('Project name')}?`              , title: 'My Project' }     ,
+    { name: 'github_username' , type: 'input', message: `What is your ${c('GitHub','b')} username?`       , title: 'github_username' },
+    { name: 'email_address'   , type: 'input', message: `What is your ${c('Email','y')} address?`         , title: 'email_address' }  ,
+    { name: 'usage'           , type: 'list' , message: `Do you need a ${c('Usage')} section?`            , title: 'Usage'             , choices: ['yes', 'no']}  ,
+    { name: 'contribution'    , type: 'list' , message: `Do you need a ${c('Contribution')} section?`     , title: 'Contribution'      , choices: ['yes', 'no'] } ,
+    { name: 'features'        , type: 'list' , message: `Do you need a ${c('Features')} section?`         , title: 'Features'          , choices: ['yes', 'no'] } ,
+    { name: 'technologies'    , type: 'list' , message: `Do you need a ${c('Technologies')} used section?`, title: 'Technologies'      , choices: ['yes', 'no'] } ,
+    { name: 'acknowledgments' , type: 'list' , message: `Do you need a ${c('Acknowledgments')} section?`  , title: 'Acknowledgments'   , choices: ['yes', 'no'] } ,
+    { type: 'list' , message: c('License type:'), name: 'license', title: 'License' , choices: [c("No License Section -----",'y'), ...badges.map(badge => badge.name)] },
 ]
 
 // TODO: Create a function to write README file
@@ -33,22 +38,19 @@ function writeToFile(fileName, data) {
             fs.accessSync(`./output/${fileName}`, fs.F_OK)
             console.log(colors.yellow(`File ${fileName} already exists.`))
         } catch (err) {
-            console.log(colors.green(`'Creating file...', ${fileName}`))
+            console.log(ln(),colors.green(`'Creating file...', ${fileName}`))
             fileCreated = true
         }
         i++
     }
 
+    // generating markdown
     let markdown = ''
-    console.log('data', data)
     Object.entries(data).forEach(([key, value]) => {
-        if (value === 'y'){
-            const test = generateMarkdown(key)
-            console.log('test', test)
-            markdown += test + '\n'
-        }
+        if (value === 'yes'){ markdown += generateMarkdown(key) + '\n' }
     })
 
+    // writing to file
     fs.writeFile(`./output/${fileName}`, markdown, (err) => {
         if(err) { console.log(`Error: ${err}`) } 
         else {
@@ -81,12 +83,14 @@ async function init(input = '') {
             acc[question.name] = 'y' 
             return acc
         }, {})
+        console.log(ln(),'mode', mode)
     }
 
-    // inquiring user input
+    // inquiring to create file
     inquirer.prompt(defaultQuestions)
     .then((res) => {
-        let response = (input === 'Default') ? defaultValues : res
+        let response = (mode === 'Default') ? defaultValues : res
+        console.log(ln(),'response', response)
         writeToFile('README.md', JSON.stringify(response, null, 2)) 
     })
 }
@@ -94,4 +98,5 @@ async function init(input = '') {
 // Function call to initialize app
 const input = process.argv[2]
 init(input)
+
 

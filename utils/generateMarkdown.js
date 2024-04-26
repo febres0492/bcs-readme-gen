@@ -84,4 +84,11 @@ function generateMarkdown(name) {
     return ` # ${name} `
 }
 
-module.exports = { generateMarkdown, badges };
+function ln() {
+    const e = new Error()
+    const frame = e.stack.split("\n")[2]
+    const lineNumber = frame.match(/:(\d+):\d+\)?$/)[1]
+    return `line ${lineNumber}: `
+}
+
+module.exports = { generateMarkdown, badges, ln }
