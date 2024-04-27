@@ -63,69 +63,38 @@ function renderLicenseSection(key, licenseName) {
 function generateMarkdown(data) {
 
     const lorem = `Lorem sed voluptua voluptua sit diam lorem, clita sadipscing et nonumy vero dolore eos sit et, takimata sanctus takimata et est aliquyam et. Sea et sed consetetur ea amet sit amet at sit, consetetur ut est et et takimata lorem.`
+    let { project_name, github_username, email } = data
 
     // deleting keys with values of "no"
     Object.keys(data).forEach((key)=> (key != 'project_name' && data[key] == 'no') && delete data[key] )
 
-    // formatting inputs
-    const name = (data.project_name  == 'yes' || data.project_name  == '') ? 'My Project' : capFirst(data.project_name )
-    data.description = { 'project_name': capFirst(name), 'value': data.description } 
-    data.github_username = { 'name': capFirst(data.github_username) || 'github_username:' } 
-    data.email = { 'name': capFirst(data.email) || 'Email_example@gmail.com' } 
-    data.instalation = data.instalation == 'yes' ? lorem : capFirst(data.instalation)
+    console.log(ln(), data) 
 
-    // formating license input
-    if('license' in data){
-        data.license = data.license == 'yes' ? 'MIT' : data.license
-    }
+    // setting fallbacks
+    Object.entries(data).forEach(([key, val]) => {
+        if(typeof val != 'string') return
+        const fallbacks = {
+            description: 'This is a description', 
+            features: `\n- **Features 1:** Lorem sed voluptua voluptua sit diam lorem,. \n- **Features 2:** Lorem sed voluptua voluptua sit diam lorem,. \n- **Features 3:** Lorem sed voluptua voluptua sit diam lorem,`, 
+            technologies: `Technologies used: \n- **HTML** \n- **css** \n- **Javascript**`, 
+            getting_started: 'Getting started:',
+            license: 'MIT', 
+            instalation: 'npm install', 
+            usage: 'npm start', 
+            contribution: 'Contributions are welcome',
+            questions: `Please email me at ${email}`, 
+            test_instructions: 'npm test', 
+            acknowledgments: 'Thank you to all contributors',
+        }
+        data[key] = fortmatInput(data[key], fallbacks[key])
+    })
 
-    
+    console.log(ln(), data)     
 
-    const templates = {
-        description: (key, val) => {
-            const projectTitle = val.project_name == "yes" ? 'My Project' : val.project_name
-            return `# ${projectTitle} 
-            \n![screenshot](screenshot.png) 
-            \n## Description
-            \n${lorem} 
-            \nApplication is live at: https://example.com `
-        },
-
-        table_of_content: (key, val)=> {
-            const links = val.reduce((acc, cur)=> acc + `\n- ${cur}`,'')
-            return `## Table of Content ${links}`
-        },
-
-        features: (key, val) => {
-            return `## ${formatTitle(key)} 
-            \n- **Features 1:** Lorem sed voluptua voluptua sit diam lorem, clita sadipscing et nonumy vero dolore eos sit. 
-            \n- **Features 2:** Lorem sed voluptua voluptua sit diam lorem, clita sadipscing et nonumy vero dolore eos sit. 
-            \n- **Features 3:** Lorem sed voluptua voluptua sit diam lorem, clita sadipscing et nonumy vero dolore eos sit. `
-        },
-
-        technologies:    (key, val) => {
-            return `## ${formatTitle(key)} 
-            \n- **HTML**
-            \n- **css** 
-            \n- **Javascript** `
-        },
-
-        getting_started: (key, val)=> {
-            return `## ${formatTitle(key)} \n${lorem}`
-        },
-
-        contribution:    (key, val) => `## ${formatTitle(key)} \n${lorem}`,
-        acknowledgments: (key, val) => `## ${formatTitle(key)} \n${lorem}`,
-        questions:       (key, val) => `## ${formatTitle(key)} \n${lorem}`,
-        tests:           (key, val) => `## ${formatTitle(key)} \n${lorem}`,
-        instalation:     (key, val) => {
-            return `## ${formatTitle(key)} \n${val}`
-        },
-        usage:           (key, val) => `## ${formatTitle(key)} \n${lorem}`,
-        license: (key, val) => renderLicenseSection(key, val),
-    }
-
-    const sections = Object.keys(templates)
+    const sections = [ 
+        'description', 'table_of_content', 'features', 'technologies', 'getting_started', 'contribution', 
+        'acknowledgments', 'questions', 'tests', 'instalation', 'usage', 'license',
+    ]
 
     // createing table_of_content links
     const table_of_content = []
@@ -146,19 +115,45 @@ function generateMarkdown(data) {
     Object.keys(orderedObj).forEach(key => delete data[key])
     orderedObj = { ...orderedObj, ...data}
 
+    const templates = {
+        description: (key, val) => {
+            const projectTitle = project_name == "yes" ? 'My Project' : project_name
+            return `# ${projectTitle} 
+            \n![screenshot](screenshot.png) 
+            \n## Description
+            \n${lorem} 
+            \nApplication is live at: https://example.com `
+        },
+
+        table_of_content: (key, val)=> {
+            const links = val.reduce((acc, cur)=> acc + `\n- ${cur}`,'')
+            return `## Table of Content ${links}`
+        },
+
+        license: (key, val) => renderLicenseSection(key, val),
+    }
+
     // creating markdown
     let markdown = ''
     Object.entries(orderedObj).forEach(([key, value]) => {
         
-        if(sections.includes(key)) {
+        if(Object.keys(templates).includes(key)) {
             markdown += templates[key](key, value) + '\n\n\n'
+        } else {
+            markdown += `## ${formatTitle(key)} \n${value} \n\n\n`
         }
     })
 
     return markdown
 }
 
+function fortmatInput(val, falback){
+    falback = capFirst(falback) || `Lorem sed voluptua voluptua sit diam lorem, clita sadipscing et nonumy vero dolore eos sit et, takimata sanctus takimata et est aliquyam et. Sea et.`
+    return (val == 'yes' || val == '') ? falback : capFirst(val)
+}
+
 function capFirst(str){
+    if(!str) return ''
     return str[0].toUpperCase() + str.slice(1)
 }
 
