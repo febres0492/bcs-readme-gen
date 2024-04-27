@@ -65,10 +65,8 @@ function generateMarkdown(data) {
     const lorem = `Lorem sed voluptua voluptua sit diam lorem, clita sadipscing et nonumy vero dolore eos sit et, takimata sanctus takimata et est aliquyam et. Sea et sed consetetur ea amet sit amet at sit, consetetur ut est et et takimata lorem.`
     let { project_name, github_username, email } = data
 
-    // deleting keys with values of "no"
+    // deleting unneeded data
     Object.keys(data).forEach((key)=> (key != 'project_name' && data[key] == 'no') && delete data[key] )
-
-    console.log(ln(), data) 
 
     // setting fallbacks
     Object.entries(data).forEach(([key, val]) => {
@@ -139,7 +137,7 @@ function generateMarkdown(data) {
         
         if(Object.keys(templates).includes(key)) {
             markdown += templates[key](key, value) + '\n\n\n'
-        } else {
+        } else if(sections.includes(key)){
             markdown += `## ${formatTitle(key)} \n${value} \n\n\n`
         }
     })
@@ -148,8 +146,7 @@ function generateMarkdown(data) {
 }
 
 function fortmatInput(val, falback){
-    falback = capFirst(falback) || `Lorem sed voluptua voluptua sit diam lorem, clita sadipscing et nonumy vero dolore eos sit et, takimata sanctus takimata et est aliquyam et. Sea et.`
-    return (val == 'yes' || val == '') ? falback : capFirst(val)
+    return (val == 'yes' || val == '') ? capFirst(falback) : capFirst(val)
 }
 
 function capFirst(str){
