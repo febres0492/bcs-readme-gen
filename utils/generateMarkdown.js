@@ -1,35 +1,36 @@
 // TODO: Create a function that returns a license badge based on which license is passed in
 // If there is no license, return an empty string
 
-const badges = [
-    { name: "Apache_2",      segment: "Apache_2.0-blue.svg",           url: "https://opensource.org/licenses/Apache-2.0" },
-    { name: "Boost_1",       segment: "Boost_1.0-lightblue.svg",       url: "https://www.boost.org/LICENSE_1_0.txt" },
-    { name: "BSD_3",         segment: "BSD_3--Clause-blue.svg",        url: "https://opensource.org/licenses/BSD-3-Clause" },
-    { name: "CC0_1",         segment: "CC0_1.0-lightgrey.svg",         url: "http://creativecommons.org/publicdomain/zero/1.0/" },
-    { name: "CC_4",          segment: "CC_BY_4.0-lightgrey.svg",       url: "https://creativecommons.org/licenses/by/4.0/" },
-    { name: "CC_SA",         segment: "CC_BY--SA_4.0-lightgrey.svg",   url: "https://creativecommons.org/licenses/by-sa/4.0/" },
-    { name: "CC_NC",         segment: "CC_BY--NC_4.0-lightgrey.svg",   url: "https://creativecommons.org/licenses/by-nc/4.0/" },
-    { name: "CC_ND",         segment: "CC_BY--ND_4.0-lightgrey.svg",   url: "https://creativecommons.org/licenses/by-nd/4.0/" },
-    { name: "EPL_1",         segment: "EPL_1.0-red.svg",               url: "https://opensource.org/licenses/EPL-1.0" },
-    { name: "GPLv3",         segment: "GPLv3-blue.svg",                url: "https://www.gnu.org/licenses/gpl-3.0" },
-    { name: "AGPL_v3",       segment: "AGPL_v3-blue.svg",              url: "https://www.gnu.org/licenses/agpl-3.0" },
-    { name: "LGPL_v3",       segment: "LGPL_v3-blue.svg",              url: "https://www.gnu.org/licenses/lgpl-3.0" },
-    { name: "FDL_v1",        segment: "FDL_v1.3-blue.svg",             url: "https://www.gnu.org/licenses/fdl-1.3" },
-    { name: "Hippocratic_3", segment: "Hippocratic_3.0-lightgrey.svg", url: "https://firstdonoharm.dev" },
-    { name: "IPL_1",         segment: "IPL_1.0-blue.svg",              url: "https://opensource.org/licenses/IPL-1.0" },
-    { name: "ISC",           segment: "ISC-blue.svg",                  url: "https://opensource.org/licenses/ISC" },
-    { name: "MIT",           segment: "MIT-yellow.svg",                url: "https://opensource.org/licenses/MIT" },
-    { name: "MPL_2",         segment: "MPL_2.0-brightgreen.svg",       url: "https://opensource.org/licenses/MPL-2.0" },
-    { name: "ODC_BY",        segment: "ODC_BY-brightgreen.svg",        url: "https://opendatacommons.org/licenses/by/" },
-    { name: "ODbL",          segment: "ODbL-brightgreen.svg",          url: "https://opendatacommons.org/licenses/odbl/" },
-    { name: "PDDL",          segment: "PDDL-brightgreen.svg",          url: "https://opendatacommons.org/licenses/pddl/" },
-    { name: "Perl",          segment: "Perl-0298c3.svg",               url: "https://opensource.org/licenses/Artistic-2.0" },
-    { name: "Artistic_2",    segment: "Artistic_2.0-0298c3.svg",       url: "https://opensource.org/licenses/Artistic-2.0" },
-    { name: "OFL_1",         segment: "OFL_1.1-lightgreen.svg",        url: "https://opensource.org/licenses/OFL-1.1" },
-    { name: "Unlicense",     segment: "Unlicense-blue.svg",            url: "http://unlicense.org/" },
-    { name: "WTFPL",         segment: "WTFPL-brightgreen.svg",         url: "http://www.wtfpl.net/about/" },
-    { name: "Zlib",          segment: "Zlib-lightgrey.svg",            url: "https://opensource.org/licenses/Zlib" },
-];
+const badges = {
+    Apache_2: {     segment: "Apache_2.0-blue.svg",           url: "https://opensource.org/licenses/Apache-2.0" },
+    Boost_1: {      segment: "Boost_1.0-lightblue.svg",       url: "https://www.boost.org/LICENSE_1_0.txt" } ,
+    BSD_3: {        segment: "BSD_3--Clause-blue.svg",        url: "https://opensource.org/licenses/BSD-3-Clause" }   ,
+    CC0_1: {        segment: "CC0_1.0-lightgrey.svg",         url: "http://creativecommons.org/publicdomain/zero/1.0/" }   ,
+    CC_4: {         segment: "CC_BY_4.0-lightgrey.svg",       url: "https://creativecommons.org/licenses/by/4.0/" }    ,
+    CC_SA: {        segment: "CC_BY--SA_4.0-lightgrey.svg",   url: "https://creativecommons.org/licenses/by-sa/4.0/" }   ,
+    CC_NC: {        segment: "CC_BY--NC_4.0-lightgrey.svg",   url: "https://creativecommons.org/licenses/by-nc/4.0/" }   ,
+    CC_ND: {        segment: "CC_BY--ND_4.0-lightgrey.svg",   url: "https://creativecommons.org/licenses/by-nd/4.0/" }   ,
+    EPL_1: {        segment: "EPL_1.0-red.svg",               url: "https://opensource.org/licenses/EPL-1.0" } ,
+    GPLv3: {        segment: "GPLv3-blue.svg",                url: "https://www.gnu.org/licenses/gpl-3.0" } ,
+    AGPL_v3: {      segment: "AGPL_v3-blue.svg",              url: "https://www.gnu.org/licenses/agpl-3.0" } ,
+    LGPL_v3: {      segment: "LGPL_v3-blue.svg",              url: "https://www.gnu.org/licenses/lgpl-3.0" } ,
+    FDL_v1: {       segment: "FDL_v1.3-blue.svg",             url: "https://www.gnu.org/licenses/fdl-1.3" }  ,
+    Hippocratic_3: {segment: "Hippocratic_3.0-lightgrey.svg", url: "https://firstdonoharm.dev" } ,
+    IPL_1: {        segment: "IPL_1.0-blue.svg",              url: "https://opensource.org/licenses/IPL-1.0" } ,
+    ISC: {          segment: "ISC-blue.svg",                  url: "https://opensource.org/licenses/ISC" } ,
+    MIT: {          segment: "MIT-yellow.svg",                url: "https://opensource.org/licenses/MIT" } ,
+    MPL_2: {        segment: "MPL_2.0-brightgreen.svg",       url: "https://opensource.org/licenses/MPL-2.0" } ,
+    ODC_BY: {       segment: "ODC_BY-brightgreen.svg",        url: "https://opendatacommons.org/licenses/by/" }  ,
+    ODbL: {         segment: "ODbL-brightgreen.svg",          url: "https://opendatacommons.org/licenses/odbl/" } ,
+    PDDL: {         segment: "PDDL-brightgreen.svg",          url: "https://opendatacommons.org/licenses/pddl/" } ,
+    Perl: {         segment: "Perl-0298c3.svg",               url: "https://opensource.org/licenses/Artistic-2.0" } ,
+    Artistic_2: {   segment: "Artistic_2.0-0298c3.svg",       url: "https://opensource.org/licenses/Artistic-2.0" } ,
+    OFL_1: {        segment: "OFL_1.1-lightgreen.svg",        url: "https://opensource.org/licenses/OFL-1.1" } ,
+    Unlicense: {    segment: "Unlicense-blue.svg",            url: "http://unlicense.org/" } ,
+    WTFPL: {        segment: "WTFPL-brightgreen.svg",         url: "http://www.wtfpl.net/about/" }   ,
+    Zlib: {         segment: "Zlib-lightgrey.svg",            url: "https://opensource.org/licenses/Zlib" }    ,
+}
+
 
 //  ---------------------------------------------------------------      ---------------------------------------------------------------
 // TODO: Create a function that returns a license badge based on which license is passed in
@@ -48,19 +49,13 @@ function renderLicenseLink(link) {
 
 // TODO: Create a function that returns the license section of README
 // If there is no license, return an empty string
-function renderLicenseSection(license, val) {
-    if (!license) { return '' }
-
-    // const badge = badges.find(b => b.name === license)
-
-    return ''
-
-    return `
-        ## License
-
-        [![License](${renderLicenseBadge(badge.segment)})](${renderLicenseLink(badge.url)})
-        
-        This project is licensed under the ${name} License - see the [LICENSE.md](${link}) file for details.
+function renderLicenseSection(key, licenseName) {
+    if (!licenseName) { return '' }
+    const link = renderLicenseLink(badges[licenseName].url)
+    const badge = renderLicenseBadge(badges[licenseName].segment)
+    return `## License  
+    \n[![License](${badge})]${link}
+    \nThis project is licensed under the ${licenseName} License - see the [LICENSE]${link} for details.
     `
 }
 
@@ -71,60 +66,90 @@ function generateMarkdown(data) {
     Object.keys(data).forEach((key)=> (key != 'project_name' && data[key] == 'no') && delete data[key] )
 
     // formatting inputs
-    data.project_name    = { 'name': data.project_name    || 'Backup name' } // formatting project_name
+    const name = (data.project_name  == 'yes' || data.project_name  == '') ? 'My Project' : data.project_name // formatting project_name
+    data.description    = { 'project_name': name } 
     data.github_username = { 'name': data.github_username || 'github_username:' } // formatting github_username
     data.email           = { 'name': data.email           || 'Email_example@gmail.com' } // formatting email
-    
-    console.log(ln(),'data', data)
     
     // formating getting_started input
     if('getting_started' in data){
 
     }
-
-    const sectionsTitles = { 
-        project_name: 'My Project', getting_started: 'Getting Started', contribution: 'Contribution', features: 'Features',
-        technologies: 'Technologies', acknowledgments: 'Acknowledgments', license: "License",
+    // formating license input
+    if('license' in data){
+        data.license = data.license == 'yes' ? 'MIT' : data.license
     }
+
+    // console.log(ln(),'data',data)
+
 
     const lorem = `Lorem sed voluptua voluptua sit diam lorem, clita sadipscing et nonumy vero dolore eos sit et, takimata sanctus takimata et est aliquyam et. Sea et sed consetetur ea amet sit amet at sit, consetetur ut est et et takimata lorem.`
 
     const templates = {
-        project_name: (key, val) => {
+        description: (key, val) => {
 
-            // console.log(ln(), key, val)
-            const projectTitle = val.name == "yes" ? 'My Project' : val.name
-            const img = `![screenshot](screenshot.png)`
-            const link = `Application is live at: https://example.com`
-            return `# ${projectTitle} \n${img} \n${lorem} \n${link}
+            const projectTitle = val.project_name == "yes" ? 'My Project' : val.project_name
+            return `# ${projectTitle} 
+            \n![screenshot](screenshot.png) 
+            \n${lorem} 
+            \nApplication is live at: https://example.com
             `
         },
 
+        table_of_content: (key, val)=> {
+            // console.log(ln(),'table_of_content', val)
+            return `## Table of Content
+                \n<ol>${val.reduce((acc, cur)=> '\n'+acc + cur),''}</ol>`
+        },
         getting_started: (key, val)=> {
-            return `## ${sectionsTitles[key]} \n${lorem}`
+            return `## ${formatTitle(key)} \n${lorem}`
         },
-        license:         (key, val)=> renderLicenseSection(key, val),
-        contribution:    (key, val)=> {
-            return `## ${sectionsTitles[key]} \n${lorem}`
-        },
-        features:        (key, val)=> {
-            return `## ${sectionsTitles[key]} \n${lorem}`
-        },
-        technologies:    (key, val)=> {
-            return `## ${sectionsTitles[key]} \n${lorem}`
-        },
-        acknowledgments: (key, val)=> {
-            return `## ${sectionsTitles[key]} \n${lorem}`
-        },
+
+        license: (key, val) => renderLicenseSection(key, val),
+
+        contribution:    (key, val) => `## ${formatTitle(key)} \n${lorem}`,
+        features:        (key, val) => `## ${formatTitle(key)} \n${lorem}`,
+        technologies:    (key, val) => `## ${formatTitle(key)} \n${lorem}`,
+        acknowledgments: (key, val) => `## ${formatTitle(key)} \n${lorem}`,
+        features:        (key, val) => `## ${formatTitle(key)} \n${lorem}`,
+        questions:       (key, val) => `## ${formatTitle(key)} \n${lorem}`,
+        tests:           (key, val) => `## ${formatTitle(key)} \n${lorem}`,
+        instalation:     (key, val) => `## ${formatTitle(key)} \n${lorem}`,
+        usage:           (key, val) => `## ${formatTitle(key)} \n${lorem}`,
     }
 
+    const sections = Object.keys(templates)
+
+    // createing table_of_content links
+    const table_of_content = []
+    Object.keys(data).forEach(key => {
+        console.log('key', key)
+        if(sections.includes(key)){
+            const link = `<a href="${formatTitle(key)}"</a>`
+            table_of_content.push(link)
+        }
+    })
+    data.table_of_content = table_of_content
+
+    // defining order of sections
+    let orderedObj = {
+        'description':data.description, 
+        'table_of_content':data.table_of_content,
+    }
+    Object.keys(orderedObj).forEach(key => delete data[key])
+    orderedObj = { ...orderedObj, ...data}
+
+    console.log(ln(),'orderedObj',orderedObj)
+
+    // creating markdown
     let markdown = ''
-    Object.entries(data).forEach(([key, value]) => {
+    Object.entries(orderedObj).forEach(([key, value]) => {
         
-        if(key in sectionsTitles) {
+        if(sections.includes(key)) {
             markdown += templates[key](key, value) + '\n\n\n'
         }
     })
+
 
     return markdown
 }
@@ -134,6 +159,12 @@ function ln() {
     const frame = e.stack.split("\n")[2]
     const lineNumber = frame.match(/:(\d+):\d+\)?$/)[1]
     return `line ${lineNumber}: `
+}
+
+function formatTitle(str){
+    str = str.split('_')
+    str = str.map(s=>s[0].toUpperCase() + s.slice(1))
+    return str.join(' ')
 }
 
 module.exports = { generateMarkdown, badges, ln }

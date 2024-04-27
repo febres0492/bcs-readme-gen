@@ -10,20 +10,26 @@ function c(str, color = 'g'){
 }
 
 // TODO: Create an array of questions for user input
+// Description, Table of Contents, Installation, Usage, License, Contributing, Tests, and Questions
+// WHEN I enter a description, installation instructions, usage information, contribution guidelines, and test instructions
+
 const questions = [
-    { name: 'project_name'    , type: 'input', message: `What is your ${c('Project name')}?` }             , 
-    { name: 'github_username' , type: 'input', message: `What is your ${c('GitHub')} username?` }          , 
-    { name: 'email'   , type: 'input', message: `What is your ${c('Email')} address?` }            , 
-    { name: 'features'        , type: 'list' , message: `Do you need a ${c('Features')} section?`          , choices: ['yes', 'no'] } ,
-    { name: 'technologies'    , type: 'list' , message: `Do you need a ${c('Technologies')} used section?` , choices: ['yes', 'no'] } ,
-    { name: 'getting_started' , type: 'list' , message: `Do you need a ${c('Getting Started')} section?`   , choices: ['yes', 'no']}  ,
-    { name: 'instalation'     , type: 'list' , message: `Does it require ${c('instalation')}?`             , choices: ['yes', 'no']}  ,
-    { name: 'usage'           , type: 'list' , message: `Do you need a ${c('Usage')} section?`             , choices: ['yes', 'no']}  ,
-    { name: 'contribution'    , type: 'list' , message: `Do you need a ${c('Contribution')} section?`      , choices: ['yes', 'no'] } ,
-    { name: 'acknowledgments' , type: 'list' , message: `Do you need a ${c('Acknowledgments')} section?`   , choices: ['yes', 'no'] } ,
-    { name: 'license'         , type: 'list' , message: `Do you need a ${c('License')} section?`           , choices: ['yes', 'no'] } ,
+    { name: 'github_username'   , type: 'input' , message: `What is your ${c('GitHub')} username?` }          , 
+    { name: 'email'             , type: 'input' , message: `What is your ${c('Email')} address?` }            , 
+    { name: 'project_name'      , type: 'input' , message: `What is your ${c('Project name')}?` }             , 
+    { name: 'description'       , type: 'input' , message: `${c('Describe ypur Project')}?` }                 , 
+    { name: 'features'          , type: 'list'  , message: `Do you need a ${c('Features')} section?`          , choices: ['yes', 'no'] } ,
+    { name: 'technologies'      , type: 'list'  , message: `Do you need a ${c('Technologies')} used section?` , choices: ['yes', 'no'] } ,
+    { name: 'getting_started'   , type: 'list'  , message: `Do you need a ${c('Getting Started')} section?`   , choices: ['yes', 'no'] } ,
+    { name: 'instalation'       , type: 'input' , message: `${c('Installation instructions')}:` }  ,
+    { name: 'usage'             , type: 'input' , message: `${c('Usage information')}:` }  ,
+    { name: 'tests'             , type: 'list'  , message: `Do you need a ${c('Tests')} section?`             , choices: ['yes', 'no'] } ,
+    { name: 'questions'         , type: 'list'  , message: `Do you need a ${c('Questions')} section?`         , choices: ['yes', 'no'] } ,
+    { name: 'contribution'      , type: 'input' , message: `${c('Contribution')}:` } ,
+    { name: 'test_instructions' , type: 'input' , message: `${c('Test Instructions')}:` } ,
+    { name: 'acknowledgments'   , type: 'list'  , message: `Do you need a ${c('Acknowledgments')} section?`   , choices: ['yes', 'no'] } ,
     { type: 'list' , message: c('License type:'), name: 'license', title: 'License' , 
-        choices: [c("No License Section -----",'y'), ...badges.map(badge => badge.name)] 
+        choices: [...Object.keys(badges), c("No License Section -----",'y') ] 
     },
 ]
 
