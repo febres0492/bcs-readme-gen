@@ -70,18 +70,11 @@ function generateMarkdown(data) {
     data.description    = { 'project_name': name } 
     data.github_username = { 'name': data.github_username || 'github_username:' } // formatting github_username
     data.email           = { 'name': data.email           || 'Email_example@gmail.com' } // formatting email
-    
-    // formating getting_started input
-    if('getting_started' in data){
 
-    }
     // formating license input
     if('license' in data){
         data.license = data.license == 'yes' ? 'MIT' : data.license
     }
-
-    // console.log(ln(),'data',data)
-
 
     const lorem = `Lorem sed voluptua voluptua sit diam lorem, clita sadipscing et nonumy vero dolore eos sit et, takimata sanctus takimata et est aliquyam et. Sea et sed consetetur ea amet sit amet at sit, consetetur ut est et et takimata lorem.`
 
@@ -93,8 +86,7 @@ function generateMarkdown(data) {
             \n![screenshot](screenshot.png) 
             \n## Description
             \n${lorem} 
-            \nApplication is live at: https://example.com
-            `
+            \nApplication is live at: https://example.com `
         },
 
         table_of_content: (key, val)=> {
@@ -106,17 +98,20 @@ function generateMarkdown(data) {
             return `## ${formatTitle(key)} \n${lorem}`
         },
 
-        license: (key, val) => renderLicenseSection(key, val),
-
+        features: () => {
+            return `## Features 
+            \n- **Features 1:** Lorem sed voluptua voluptua sit diam lorem, clita sadipscing et nonumy vero dolore eos sit. 
+            \n- **Features 2:** Lorem sed voluptua voluptua sit diam lorem, clita sadipscing et nonumy vero dolore eos sit. 
+            \n- **Features 3:** Lorem sed voluptua voluptua sit diam lorem, clita sadipscing et nonumy vero dolore eos sit. `
+        },
         contribution:    (key, val) => `## ${formatTitle(key)} \n${lorem}`,
-        features:        (key, val) => `## ${formatTitle(key)} \n${lorem}`,
         technologies:    (key, val) => `## ${formatTitle(key)} \n${lorem}`,
         acknowledgments: (key, val) => `## ${formatTitle(key)} \n${lorem}`,
-        features:        (key, val) => `## ${formatTitle(key)} \n${lorem}`,
         questions:       (key, val) => `## ${formatTitle(key)} \n${lorem}`,
         tests:           (key, val) => `## ${formatTitle(key)} \n${lorem}`,
         instalation:     (key, val) => `## ${formatTitle(key)} \n${lorem}`,
         usage:           (key, val) => `## ${formatTitle(key)} \n${lorem}`,
+        license: (key, val) => renderLicenseSection(key, val),
     }
 
     const sections = Object.keys(templates)
