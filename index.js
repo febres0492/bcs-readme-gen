@@ -11,21 +11,20 @@ function c(str, color = 'g'){
 
 // TODO: Create an array of questions for user input
 const questions = [
-    { name: 'project_name'    , type: 'input', message: `What is your ${c('Project name')}?`              , title: 'My Project' }      , 
-    { name: 'github_username' , type: 'input', message: `What is your ${c('GitHub')} username?`           , title: 'github_username' } , 
-    { name: 'email_address'   , type: 'input', message: `What is your ${c('Email')} address?`             , title: 'email_address' }   , 
-    { name: 'usage'           , type: 'list' , message: `Do you need a ${c('Usage')} section?`            , title: 'Usage'             , choices: ['yes', 'no']}  ,
-    { name: 'contribution'    , type: 'list' , message: `Do you need a ${c('Contribution')} section?`     , title: 'Contribution'      , choices: ['yes', 'no'] } ,
-    { name: 'features'        , type: 'list' , message: `Do you need a ${c('Features')} section?`         , title: 'Features'          , choices: ['yes', 'no'] } ,
-    { name: 'technologies'    , type: 'list' , message: `Do you need a ${c('Technologies')} used section?`, title: 'Technologies'      , choices: ['yes', 'no'] } ,
-    { name: 'acknowledgments' , type: 'list' , message: `Do you need a ${c('Acknowledgments')} section?`  , title: 'Acknowledgments'   , choices: ['yes', 'no'] } ,
+    { name: 'project_name'    , type: 'input', message: `What is your ${c('Project name')}?` }             , 
+    { name: 'github_username' , type: 'input', message: `What is your ${c('GitHub')} username?` }          , 
+    { name: 'email_address'   , type: 'input', message: `What is your ${c('Email')} address?` }            , 
+    { name: 'usage'           , type: 'list' , message: `Do you need a ${c('Usage')} section?`             , choices: ['yes', 'no']}  ,
+    { name: 'contribution'    , type: 'list' , message: `Do you need a ${c('Contribution')} section?`      , choices: ['yes', 'no'] } ,
+    { name: 'features'        , type: 'list' , message: `Do you need a ${c('Features')} section?`          , choices: ['yes', 'no'] } ,
+    { name: 'technologies'    , type: 'list' , message: `Do you need a ${c('Technologies')} used section?` , choices: ['yes', 'no'] } ,
+    { name: 'acknowledgments' , type: 'list' , message: `Do you need a ${c('Acknowledgments')} section?`   , choices: ['yes', 'no'] } ,
     { type: 'list' , message: c('License type:'), name: 'license', title: 'License' , choices: [c("No License Section -----",'y'), ...badges.map(badge => badge.name)] },
 ]
 
 // TODO: Create a function to write README file
 function writeToFile(fileName, data) {
     data = JSON.parse(data)
-    console.log(ln(),'data', data)
     const fs = require('fs')
     fileName = 'README.md' 
     let fileCreated = false
@@ -54,11 +53,7 @@ function writeToFile(fileName, data) {
     }
 
     // generating markdown
-    let markdown = ''
-    Object.entries(data).forEach(([key, value]) => {
-        const sections = [ 'project_name', 'usage', 'contribution', 'features', 'technologies', 'acknowledgments' ]
-        if (sections.includes(key) && value === 'yes') { markdown += generateMarkdown(key, value) + '\n\n' }
-    })
+    const markdown = generateMarkdown(data)
 
     // writing to file
     fs.writeFile(`./output/${fileName}`, markdown, (err) => {
@@ -101,7 +96,6 @@ async function init(input = '') {
     .then((res) => {
         
         let response = (mode === 'Default') ? defaultValues : res
-        console.log(ln(),'response', response)
         writeToFile('README.md', JSON.stringify(response, null, 2)) 
     })
 }

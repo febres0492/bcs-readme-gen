@@ -31,11 +31,6 @@ const badges = [
     { name: "Zlib", segment: "Zlib-lightgrey.svg", url: "https://opensource.org/licenses/Zlib" },
 ];
 
-const sectionsTitles = { 
-    project_name: 'MyProject', usage: 'Usage', contribution: 'Contribution', features: 'Features',
-    technologies: 'Technologies', acknowledgments: 'Acknowledgments',
-}
-
 //  ---------------------------------------------------------------      ---------------------------------------------------------------
 // TODO: Create a function that returns a license badge based on which license is passed in
 // If there is no license, return an empty string
@@ -67,21 +62,48 @@ function renderLicenseSection(license) {
 }
 
 // TODO: Create a function to generate markdown for README
-function generateMarkdown(name) {
-    
-    const sections = {
-        project_name:    (val)=> ` # ${sectionsTitles[val]} `,
-        usage:           (val)=> ` # ${sectionsTitles[val]} `,
-        license:         (val)=> ` # ${sectionsTitles[val]} `,
-        contribution:    (val)=> ` # ${sectionsTitles[val]} `,
-        features:        (val)=> ` # ${sectionsTitles[val]} `,
-        technologies:    (val)=> ` # ${sectionsTitles[val]} `,
-        acknowledgments: (val)=> ` # ${sectionsTitles[val]} `,
+function generateMarkdown(data) {
+
+    data.project_name = { 'name': data.project_name }
+    console.log(ln(), data)
+
+    const sectionsTitles = { 
+        project_name: 'MyProject', usage: 'Usage', contribution: 'Contribution', features: 'Features',
+        technologies: 'Technologies', acknowledgments: 'Acknowledgments', license: "License",
     }
 
-    if(name in sections) {
-        return sections[name](name)
+    const templates = {
+        project_name:    (key, val)=> {
+
+            console.log(ln(), key, val)
+            const projectTitle = val.name == "yes" ? 'My Project' : val.name
+            const description = `Lorem sed voluptua voluptua sit diam lorem, clita sadipscing et nonumy vero dolore eos sit et, takimata sanctus takimata et est aliquyam et. Sea et sed consetetur ea amet sit amet at sit, consetetur ut est et et takimata lorem.`
+            const img = `![screenshot]](./screenshot.png)`
+            const link = `Application is live at: https://example.com`
+            return `# ${projectTitle} \n${description} \n${img}  \n${link}
+            `
+        },
+
+
+
+
+        usage:           (key, val)=> `# ${sectionsTitles[key]} `,
+        license:         (key, val)=> `# ${sectionsTitles[key]} `,
+        contribution:    (key, val)=> `# ${sectionsTitles[key]} `,
+        features:        (key, val)=> `# ${sectionsTitles[key]} `,
+        technologies:    (key, val)=> `# ${sectionsTitles[key]} `,
+        acknowledgments: (key, val)=> `# ${sectionsTitles[key]} `,
     }
+
+    let markdown = ''
+    Object.entries(data).forEach(([key, value]) => {
+        
+        if(key in sectionsTitles) {
+            markdown += templates[key](key, value) + '\n\n\n'
+        }
+    })
+
+    return markdown
 }
 
 function ln() {
