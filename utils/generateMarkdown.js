@@ -32,7 +32,7 @@ const badges = {
 }
 
 
-//  ---------------------------------------------------------------      ---------------------------------------------------------------
+//  ------------------------------------------------------------------------------------------------------------------------------
 // TODO: Create a function that returns a license badge based on which license is passed in
 // If there is no license, return an empty string
 function renderLicenseBadge(segment) {  
@@ -62,25 +62,27 @@ function renderLicenseSection(key, licenseName) {
 // TODO: Create a function to generate markdown for README
 function generateMarkdown(data) {
 
+    const lorem = `Lorem sed voluptua voluptua sit diam lorem, clita sadipscing et nonumy vero dolore eos sit et, takimata sanctus takimata et est aliquyam et. Sea et sed consetetur ea amet sit amet at sit, consetetur ut est et et takimata lorem.`
+
     // deleting keys with values of "no"
     Object.keys(data).forEach((key)=> (key != 'project_name' && data[key] == 'no') && delete data[key] )
 
     // formatting inputs
-    const name = (data.project_name  == 'yes' || data.project_name  == '') ? 'My Project' : data.project_name // formatting project_name
-    data.description    = { 'project_name': name } 
-    data.github_username = { 'name': data.github_username || 'github_username:' } // formatting github_username
-    data.email           = { 'name': data.email           || 'Email_example@gmail.com' } // formatting email
+    const name = (data.project_name  == 'yes' || data.project_name  == '') ? 'My Project' : capFirst(data.project_name )
+    data.description = { 'project_name': capFirst(name), 'value': data.description } 
+    data.github_username = { 'name': capFirst(data.github_username) || 'github_username:' } 
+    data.email = { 'name': capFirst(data.email) || 'Email_example@gmail.com' } 
+    data.instalation = data.instalation == 'yes' ? lorem : capFirst(data.instalation)
 
     // formating license input
     if('license' in data){
         data.license = data.license == 'yes' ? 'MIT' : data.license
     }
 
-    const lorem = `Lorem sed voluptua voluptua sit diam lorem, clita sadipscing et nonumy vero dolore eos sit et, takimata sanctus takimata et est aliquyam et. Sea et sed consetetur ea amet sit amet at sit, consetetur ut est et et takimata lorem.`
+    
 
     const templates = {
         description: (key, val) => {
-
             const projectTitle = val.project_name == "yes" ? 'My Project' : val.project_name
             return `# ${projectTitle} 
             \n![screenshot](screenshot.png) 
@@ -90,7 +92,6 @@ function generateMarkdown(data) {
         },
 
         table_of_content: (key, val)=> {
-            console.log(ln(),'table_of_content', val)
             const links = val.reduce((acc, cur)=> acc + `\n- ${cur}`,'')
             return `## Table of Content ${links}`
         },
@@ -104,7 +105,7 @@ function generateMarkdown(data) {
 
         technologies:    (key, val) => {
             return `## ${formatTitle(key)} 
-            \n- **HTML** 
+            \n- **HTML**
             \n- **css** 
             \n- **Javascript** `
         },
@@ -117,7 +118,9 @@ function generateMarkdown(data) {
         acknowledgments: (key, val) => `## ${formatTitle(key)} \n${lorem}`,
         questions:       (key, val) => `## ${formatTitle(key)} \n${lorem}`,
         tests:           (key, val) => `## ${formatTitle(key)} \n${lorem}`,
-        instalation:     (key, val) => `## ${formatTitle(key)} \n${lorem}`,
+        instalation:     (key, val) => {
+            return `## ${formatTitle(key)} \n${val}`
+        },
         usage:           (key, val) => `## ${formatTitle(key)} \n${lorem}`,
         license: (key, val) => renderLicenseSection(key, val),
     }
@@ -152,15 +155,24 @@ function generateMarkdown(data) {
         }
     })
 
-
     return markdown
+}
+
+function capFirst(str){
+    return str[0].toUpperCase() + str.slice(1)
+}
+
+function c(str, color = 'g'){ 
+    const colors = require('colors')
+    const opt = { r: 'red', g: 'green', y: 'yellow', b: 'blue' }
+    return colors[opt[color]](str) 
 }
 
 function ln() {
     const e = new Error()
     const frame = e.stack.split("\n")[2]
     const lineNumber = frame.match(/:(\d+):\d+\)?$/)[1]
-    return `line ${lineNumber}: `
+    return c(`line ${lineNumber}`,'r')
 }
 
 function formatTitle(str){

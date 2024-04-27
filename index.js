@@ -1,10 +1,11 @@
 // TODO: Include packages needed for this application
 const inquirer = require('inquirer')
-const colors = require('colors')
+
 const { generateMarkdown, badges, ln } = require('./utils/generateMarkdown')
 
 // function to give text color
 function c(str, color = 'g'){ 
+    const colors = require('colors')
     const opt = { r: 'red', g: 'green', y: 'yellow', b: 'blue' }
     return colors[opt[color]](str) 
 }
@@ -14,20 +15,19 @@ function c(str, color = 'g'){
 // WHEN I enter a description, installation instructions, usage information, contribution guidelines, and test instructions
 
 const questions = [
-    { name: 'github_username'   , type: 'input' , message: `What is your ${c('GitHub')} username?` }          , 
-    { name: 'email'             , type: 'input' , message: `What is your ${c('Email')} address?` }            , 
-    { name: 'project_name'      , type: 'input' , message: `What is your ${c('Project name')}?` }             , 
-    { name: 'description'       , type: 'input' , message: `${c('Describe ypur Project')}?` }                 , 
-    { name: 'features'          , type: 'list'  , message: `Do you need a ${c('Features')} section?`          , choices: ['yes', 'no'] } ,
-    { name: 'technologies'      , type: 'list'  , message: `Do you need a ${c('Technologies')} used section?` , choices: ['yes', 'no'] } ,
-    { name: 'getting_started'   , type: 'list'  , message: `Do you need a ${c('Getting Started')} section?`   , choices: ['yes', 'no'] } ,
+    { name: 'github_username'   , type: 'input' , message: `What is your ${c('GitHub')} username?` }        , 
+    { name: 'email'             , type: 'input' , message: `What is your ${c('Email')} address?` }          , 
+    { name: 'project_name'      , type: 'input' , message: `What is your ${c('Project name')}?` }           , 
+    { name: 'description'       , type: 'input' , message: `${c('Describe')} your Project:` }               , 
+    { name: 'features'          , type: 'list'  , message: `Do you need a ${c('Features')} section?`        , choices: ['yes' , 'no'] } ,
+    { name: 'technologies'      , type: 'list'  , message: `Do you need a ${c('Technologies')} section?`    , choices: ['yes', 'no'] } ,
+    { name: 'getting_started'   , type: 'list'  , message: `Do you need a ${c('Getting Started')} section?` , choices: ['yes' , 'no'] } ,
     { name: 'instalation'       , type: 'input' , message: `${c('Installation instructions')}:` }  ,
     { name: 'usage'             , type: 'input' , message: `${c('Usage information')}:` }  ,
-    { name: 'tests'             , type: 'list'  , message: `Do you need a ${c('Tests')} section?`             , choices: ['yes', 'no'] } ,
-    { name: 'questions'         , type: 'list'  , message: `Do you need a ${c('Questions')} section?`         , choices: ['yes', 'no'] } ,
-    { name: 'contribution'      , type: 'input' , message: `${c('Contribution')}:` } ,
+    { name: 'questions'         , type: 'list'  , message: `Do you need a ${c('Questions')} section?`       , choices: ['yes' , 'no'] } ,
+    { name: 'contribution'      , type: 'input' , message: `${c('Contributions')}:` } ,
     { name: 'test_instructions' , type: 'input' , message: `${c('Test Instructions')}:` } ,
-    { name: 'acknowledgments'   , type: 'list'  , message: `Do you need a ${c('Acknowledgments')} section?`   , choices: ['yes', 'no'] } ,
+    { name: 'acknowledgments'   , type: 'list'  , message: `Do you need a ${c('Acknowledgments')} section?` , choices: ['yes' , 'no'] } ,
     { type: 'list' , message: c('License type:'), name: 'license', title: 'License' , 
         choices: [...Object.keys(badges), c("No License Section -----",'y') ] 
     },
@@ -98,7 +98,6 @@ async function init(input = '') {
             acc[question.name] = 'yes' 
             return acc
         }, {})
-        console.log(ln(),'mode', mode)
     }
 
     // inquiring to create file
