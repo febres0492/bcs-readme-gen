@@ -91,15 +91,16 @@ function generateMarkdown(data) {
             const projectTitle = val.project_name == "yes" ? 'My Project' : val.project_name
             return `# ${projectTitle} 
             \n![screenshot](screenshot.png) 
+            \n## Description
             \n${lorem} 
             \nApplication is live at: https://example.com
             `
         },
 
         table_of_content: (key, val)=> {
-            // console.log(ln(),'table_of_content', val)
-            return `## Table of Content
-                \n<ol>${val.reduce((acc, cur)=> '\n'+acc + cur),''}</ol>`
+            console.log(ln(),'table_of_content', val)
+            const links = val.reduce((acc, cur)=> acc + `\n- ${cur}`,'')
+            return `## Table of Content ${links}`
         },
         getting_started: (key, val)=> {
             return `## ${formatTitle(key)} \n${lorem}`
@@ -123,9 +124,9 @@ function generateMarkdown(data) {
     // createing table_of_content links
     const table_of_content = []
     Object.keys(data).forEach(key => {
-        console.log('key', key)
+        if(key == 'description') return
         if(sections.includes(key)){
-            const link = `<a href="${formatTitle(key)}"</a>`
+            const link = `[${formatTitle(key)}](#${key.replace('_','-')})`
             table_of_content.push(link)
         }
     })
@@ -138,8 +139,6 @@ function generateMarkdown(data) {
     }
     Object.keys(orderedObj).forEach(key => delete data[key])
     orderedObj = { ...orderedObj, ...data}
-
-    console.log(ln(),'orderedObj',orderedObj)
 
     // creating markdown
     let markdown = ''
