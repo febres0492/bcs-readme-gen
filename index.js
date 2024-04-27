@@ -13,13 +13,18 @@ function c(str, color = 'g'){
 const questions = [
     { name: 'project_name'    , type: 'input', message: `What is your ${c('Project name')}?` }             , 
     { name: 'github_username' , type: 'input', message: `What is your ${c('GitHub')} username?` }          , 
-    { name: 'email_address'   , type: 'input', message: `What is your ${c('Email')} address?` }            , 
-    { name: 'usage'           , type: 'list' , message: `Do you need a ${c('Usage')} section?`             , choices: ['yes', 'no']}  ,
-    { name: 'contribution'    , type: 'list' , message: `Do you need a ${c('Contribution')} section?`      , choices: ['yes', 'no'] } ,
+    { name: 'email'   , type: 'input', message: `What is your ${c('Email')} address?` }            , 
     { name: 'features'        , type: 'list' , message: `Do you need a ${c('Features')} section?`          , choices: ['yes', 'no'] } ,
     { name: 'technologies'    , type: 'list' , message: `Do you need a ${c('Technologies')} used section?` , choices: ['yes', 'no'] } ,
+    { name: 'getting_started' , type: 'list' , message: `Do you need a ${c('Getting Started')} section?`   , choices: ['yes', 'no']}  ,
+    { name: 'instalation'     , type: 'list' , message: `Does it require ${c('instalation')}?`             , choices: ['yes', 'no']}  ,
+    { name: 'usage'           , type: 'list' , message: `Do you need a ${c('Usage')} section?`             , choices: ['yes', 'no']}  ,
+    { name: 'contribution'    , type: 'list' , message: `Do you need a ${c('Contribution')} section?`      , choices: ['yes', 'no'] } ,
     { name: 'acknowledgments' , type: 'list' , message: `Do you need a ${c('Acknowledgments')} section?`   , choices: ['yes', 'no'] } ,
-    { type: 'list' , message: c('License type:'), name: 'license', title: 'License' , choices: [c("No License Section -----",'y'), ...badges.map(badge => badge.name)] },
+    { name: 'license'         , type: 'list' , message: `Do you need a ${c('License')} section?`           , choices: ['yes', 'no'] } ,
+    { type: 'list' , message: c('License type:'), name: 'license', title: 'License' , 
+        choices: [c("No License Section -----",'y'), ...badges.map(badge => badge.name)] 
+    },
 ]
 
 // TODO: Create a function to write README file
@@ -46,7 +51,6 @@ function writeToFile(fileName, data) {
             if(i === 1) { console.log(c(`Files README.md and REAME_0.md already exists:`), ) }
             if(i > 1) { console.log(c(`File REAME_0 to _${i-1} already exists:`), ) }
 
-            console.log(ln(),c(`Creating file ${fileName}`, 'y'))
             fileCreated = true
         }
         i++
@@ -59,7 +63,7 @@ function writeToFile(fileName, data) {
     fs.writeFile(`./output/${fileName}`, markdown, (err) => {
         if(err) { console.log(`Error: ${err}`) } 
         else {
-            console.log(`created ${fileName} file.`);
+            console.log(c(`created file: ${c(fileName,'y')}`));
             fileCreated = true
         }
     })
