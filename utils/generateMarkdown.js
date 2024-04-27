@@ -94,18 +94,26 @@ function generateMarkdown(data) {
             const links = val.reduce((acc, cur)=> acc + `\n- ${cur}`,'')
             return `## Table of Content ${links}`
         },
-        getting_started: (key, val)=> {
-            return `## ${formatTitle(key)} \n${lorem}`
-        },
 
-        features: () => {
-            return `## Features 
+        features: (key, val) => {
+            return `## ${formatTitle(key)} 
             \n- **Features 1:** Lorem sed voluptua voluptua sit diam lorem, clita sadipscing et nonumy vero dolore eos sit. 
             \n- **Features 2:** Lorem sed voluptua voluptua sit diam lorem, clita sadipscing et nonumy vero dolore eos sit. 
             \n- **Features 3:** Lorem sed voluptua voluptua sit diam lorem, clita sadipscing et nonumy vero dolore eos sit. `
         },
+
+        technologies:    (key, val) => {
+            return `## ${formatTitle(key)} 
+            \n- **HTML** 
+            \n- **css** 
+            \n- **Javascript** `
+        },
+
+        getting_started: (key, val)=> {
+            return `## ${formatTitle(key)} \n${lorem}`
+        },
+
         contribution:    (key, val) => `## ${formatTitle(key)} \n${lorem}`,
-        technologies:    (key, val) => `## ${formatTitle(key)} \n${lorem}`,
         acknowledgments: (key, val) => `## ${formatTitle(key)} \n${lorem}`,
         questions:       (key, val) => `## ${formatTitle(key)} \n${lorem}`,
         tests:           (key, val) => `## ${formatTitle(key)} \n${lorem}`,
