@@ -38,12 +38,12 @@ function writeToFile(fileName, data) {
     data = JSON.parse(data)
     const fs = require('fs')
     fileName = 'README.md' 
-    let fileCreated = false
+    let createFile = false
     let i = -1
     let fileAmountLimit = 100
 
     // checing if the file exists and updating the file name
-    while(fileCreated === false && i < fileAmountLimit) {
+    while(createFile === false && i < fileAmountLimit) {
         if(i === fileAmountLimit) { console.log(c('File limit reached. clear the output folder to create more files','r')); break }
         try {
             let subfix = `_${i}`
@@ -57,7 +57,7 @@ function writeToFile(fileName, data) {
             if(i === 1) { console.log(c(`Files README.md and REAME_0.md already exists:`), ) }
             if(i > 1) { console.log(c(`File REAME_0 to _${i-1} already exists:`), ) }
 
-            fileCreated = true
+            createFile = true
         }
         i++
     }
@@ -69,8 +69,7 @@ function writeToFile(fileName, data) {
     fs.writeFile(`./output/${fileName}`, markdown, (err) => {
         if(err) { console.log(`Error: ${err}`) } 
         else {
-            console.log(c(`created file: ${c(fileName,'y')}`));
-            fileCreated = true
+            console.log(c(`creating file: ${c(fileName,'y')}`));
         }
     })
 }
