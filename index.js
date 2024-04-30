@@ -22,7 +22,7 @@ const questions = [
     { name: 'features'          , type: 'list'  , message: `Do you need a ${c('Features')} section?`        , choices: ['yes' , 'no'] } ,
     { name: 'technologies'      , type: 'list'  , message: `Do you need a ${c('Technologies')} section?`    , choices: ['yes', 'no'] } ,
     { name: 'getting_started'   , type: 'list'  , message: `Do you need a ${c('Getting Started')} section?` , choices: ['yes' , 'no'] } ,
-    { name: 'instalation'       , type: 'input' , message: `${c('Installation instructions')}:` }  ,
+    { name: 'installation'       , type: 'input' , message: `${c('Installation instructions')}:` }  ,
     { name: 'usage'             , type: 'input' , message: `${c('Usage information')}:` }  ,
     { name: 'questions'         , type: 'list'  , message: `Do you need a ${c('Questions')} section?`       , choices: ['yes' , 'no'] } ,
     { name: 'contribution'      , type: 'input' , message: `${c('Contributions')}:` } ,

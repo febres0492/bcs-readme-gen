@@ -49,49 +49,69 @@ function renderLicenseLink(link) {
 
 // TODO: Create a function that returns the license section of README
 // If there is no license, return an empty string
-function renderLicenseSection(key, licenseName) {
-    if (!licenseName) { return '' }
-    const link = renderLicenseLink(badges[licenseName].url)
-    const badge = renderLicenseBadge(badges[licenseName].segment)
+function renderLicenseSection(key, license) {
+    if (!license || !license.length) { return '' }
+    if(typeof license == "object" && license.value) {license = license.value}
+    const link = renderLicenseLink(badges[license].url)
+    const badge = renderLicenseBadge(badges[license].segment)
     return `## License  
     \n[![License](${badge})]${link}
-    \nThis project is licensed under the ${licenseName} License - see the [LICENSE]${link} for details.
+    \nThis project is licensed under the ${license} License - see the [LICENSE]${link} for details.
     `
 }
 
 // TODO: Create a function to generate markdown for README
 function generateMarkdown(data) {
 
-    const lorem = `Lorem sed voluptua voluptua sit diam lorem, clita sadipscing et nonumy vero dolore eos sit et, takimata sanctus takimata et est aliquyam et. Sea et sed consetetur ea amet sit amet at sit, consetetur ut est et et takimata lorem.`
-    let { project_name, github_username, email } = data
+    // creating fallbacks
+    const fallbacks = {
+        project_name: 'My Project',
+        github_username: 'Example123',
+        email: 'Example123@gmail.com',
+        description: 'This is a description \nLorem sed voluptua voluptua sit diam lorem, clita sadipscing et nonumy vero dolore eos sit et, takimata sanctus takimata et est aliquyam et. Sea et sed consetetur ea amet sit amet at sit, consetetur ut est et et takimata lorem.', 
+        features: `\n- **Features 1:** Lorem sed voluptua voluptua sit diam lorem,. \n- **Features 2:** Lorem sed voluptua voluptua sit diam lorem,. \n- **Features 3:** Lorem sed voluptua voluptua sit diam lorem,`, 
+        technologies: `Technologies used: \n- **HTML** \n- **css** \n- **Javascript**`, 
+        installation: {
+            templateType: 'code', 
+            instructions: 'Follow these steps to get your development environment set up:', 
+            code: `git clone https://github.com/[github_username]/[project_name].git \ncd [project_name]`
+        }, 
+        usage: {
+            templateType: 'code', 
+            instructions: 'Follow these steps to get your development environment set up:', 
+            code: 'npm start'
+        }, 
+        test_instructions: {
+            templateType: 'code', 
+            instructions: 'Follow these steps to get your development environment set up:', 
+            code: 'npm test'
+        }, 
+        contribution: 'Contributions are welcome',
+        acknowledgments: 'Thank you to all contributors',
+        questions: `Please email me at ${fortmatInput(data.email, 'Example123@gmail.com')}`,
+        license: 'MIT',
+    }
 
-    // deleting unneeded data
-    Object.keys(data).forEach((key)=> (key != 'project_name' && data[key] == 'no') && delete data[key] )
+    data.author = fortmatInput(data.github_username, fallbacks.github_username),
 
-    // setting fallbacks
+    // formatting data and setting fallbacks
     Object.entries(data).forEach(([key, val]) => {
         if(typeof val != 'string') return
-        const fallbacks = {
-            description: 'This is a description', 
-            features: `\n- **Features 1:** Lorem sed voluptua voluptua sit diam lorem,. \n- **Features 2:** Lorem sed voluptua voluptua sit diam lorem,. \n- **Features 3:** Lorem sed voluptua voluptua sit diam lorem,`, 
-            technologies: `Technologies used: \n- **HTML** \n- **css** \n- **Javascript**`, 
-            getting_started: 'Getting started:',
-            license: 'MIT', 
-            instalation: 'npm install', 
-            usage: 'npm start', 
-            contribution: 'Contributions are welcome',
-            questions: `Please email me at ${email}`, 
-            test_instructions: 'npm test', 
-            acknowledgments: 'Thank you to all contributors',
-        }
         data[key] = fortmatInput(data[key], fallbacks[key])
     })
 
-    console.log(ln(), data)     
+    // replacing [placeholders] in the data
+    let dataStr = JSON.stringify(data, null, 2)
+    const regex = /\[([^\[\]]+)\]/g;
+    dataStr = dataStr.replace(regex, (match, varName) => {
+        return varName in data ? data[varName] : varName;
+    })
+    data = JSON.parse(dataStr)
 
+    // setting sections order
     const sections = [ 
-        'description', 'table_of_content', 'features', 'technologies', 'getting_started', 'contribution', 
-        'acknowledgments', 'questions', 'tests', 'instalation', 'usage', 'license',
+        'description', 'table_of_content', 'features', 'technologies', 'getting_started', 
+        'installation', 'usage', 'test_instructions', 'questions', 'author', 'contribution', 'acknowledgments', 'license',
     ]
 
     // createing table_of_content links
@@ -99,50 +119,68 @@ function generateMarkdown(data) {
     Object.keys(data).forEach(key => {
         if(key == 'description') return
         if(sections.includes(key)){
-            const link = `[${formatTitle(key)}](#${key.replace('_','-')})`
+            const link = `- [${formatTitle(key)}](#${key.replace('_','-')})`
             table_of_content.push(link)
         }
     })
     data.table_of_content = table_of_content
 
-    // defining order of sections
-    let orderedObj = {
-        'description':data.description, 
-        'table_of_content':data.table_of_content,
-    }
-    Object.keys(orderedObj).forEach(key => delete data[key])
-    orderedObj = { ...orderedObj, ...data}
-
     const templates = {
         description: (key, val) => {
-            const projectTitle = project_name == "yes" ? 'My Project' : project_name
-            return `# ${projectTitle} 
+            return `# ${data.project_name} 
             \n![screenshot](screenshot.png) 
             \n## Description
-            \n${lorem} 
+            \n${val} 
             \nApplication is live at: https://example.com `
         },
 
         table_of_content: (key, val)=> {
-            const links = val.reduce((acc, cur)=> acc + `\n- ${cur}`,'')
+            const links = val.reduce((acc, cur)=> acc + `\n${cur}`,'')
             return `## Table of Content ${links}`
+        },
+        getting_started: (key, val) => `## Getting Started 
+            \nThis section will guide you through setting up the project locally. By the end of this guide, you will have a working version of [Project Name] running on your machine.
+
+            \n### Prerequisites
+            \nBefore you begin, ensure you have the following installed:
+            \n- [Node.js](https://nodejs.org/) (v14.0 or later)
+            \n- [Git](https://git-scm.com/)
+            \n- A text editor like [VSCode](https://code.visualstudio.com/)
+        `,
+        default: (key, val) => `## ${formatTitle(key)} \n${val}`,
+
+        code: (key, val) => {
+            const instructions = val.instructions || 'Follow these steps to get your development environment set up: \n1. Clone the repository:'
+            const code = val.code || 'git clone'
+            return`## ${formatTitle(key)} \n${instructions}: \n\`\`\`bash \n${code} \n\`\`\` `
         },
 
         license: (key, val) => renderLicenseSection(key, val),
     }
 
-    // creating markdown
-    let markdown = ''
-    Object.entries(orderedObj).forEach(([key, value]) => {
-        
-        if(Object.keys(templates).includes(key)) {
-            markdown += templates[key](key, value) + '\n\n\n'
-        } else if(sections.includes(key)){
-            markdown += `## ${formatTitle(key)} \n${value} \n\n\n`
-        }
+    Object.entries(data).forEach(([key, val]) => {
+
     })
 
-    return markdown
+    // creating markdown
+    let markdown = {}
+    sections.forEach( item => {
+        markdown[item] = ''
+        const value = data[item]
+        
+        if(Object.keys(templates).includes(item)) {
+            markdown[item] += templates[item](item, value) + '\n\n\n'
+            return
+        }
+
+        if(typeof value == 'object' && 'templateType' in value && value.templateType == 'code'){
+            markdown[item] += templates['code'](item, value) + '\n\n\n'
+            return
+        }
+        markdown[item] += templates['default'](item, value) + '\n\n\n'
+    })
+
+    return Object.values(markdown).join('')
 }
 
 function fortmatInput(val, falback){
@@ -150,7 +188,7 @@ function fortmatInput(val, falback){
 }
 
 function capFirst(str){
-    if(!str) return ''
+    if(!str || typeof str != 'string') return str
     return str[0].toUpperCase() + str.slice(1)
 }
 
