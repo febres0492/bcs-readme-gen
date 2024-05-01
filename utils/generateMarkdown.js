@@ -108,6 +108,8 @@ function generateMarkdown(data) {
     })
     data = JSON.parse(dataStr)
 
+    console.log(ln(),data)
+
     // setting sections order
     const sections = [ 
         'description', 'table_of_content', 'features', 'technologies', 'getting_started', 
@@ -115,15 +117,7 @@ function generateMarkdown(data) {
     ]
 
     // createing table_of_content links
-    const table_of_content = []
-    Object.keys(data).forEach(key => {
-        if(key == 'description') return
-        if(sections.includes(key)){
-            const link = `- [${formatTitle(key)}](#${key.replace('_','-')})`
-            table_of_content.push(link)
-        }
-    })
-    data.table_of_content = table_of_content
+    data.table_of_content = createTableContent(data, sections)
 
     const templates = {
         description: (key, val) => {
@@ -152,15 +146,14 @@ function generateMarkdown(data) {
         code: (key, val) => {
             const instructions = val.instructions || 'Follow these steps to get your development environment set up: \n1. Clone the repository:'
             const code = val.code || 'git clone'
-            return`## ${formatTitle(key)} \n${instructions}: \n\`\`\`bash \n${code} \n\`\`\` `
+            return`## ${formatTitle(key)} \n${instructions} \n\`\`\`bash \n${code} \n\`\`\` `
         },
 
-        license: (key, val) => renderLicenseSection(key, val),
+        license: (key, val) => {
+            if(val.split(' ')[0].toLowerCase().indexOf('no') > -1) return ''
+            return renderLicenseSection(key, val)
+        },
     }
-
-    Object.entries(data).forEach(([key, val]) => {
-
-    })
 
     // creating markdown
     let markdown = {}
@@ -181,6 +174,18 @@ function generateMarkdown(data) {
     })
 
     return Object.values(markdown).join('')
+}
+
+function createTableContent(data, sections) {
+    const table_of_content = []
+    Object.keys(data).forEach(key => {
+        if (key == 'description') return
+        if (sections.includes(key)) {
+            const link = `- [${formatTitle(key)}](#${key.replace('_', '-')})`
+            table_of_content.push(link)
+        }
+    })
+    return table_of_content
 }
 
 function fortmatInput(val, falback){

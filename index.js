@@ -11,25 +11,31 @@ function c(str, color = 'g'){
 }
 
 // TODO: Create an array of questions for user input
-// Description, Table of Contents, Installation, Usage, License, Contributing, Tests, and Questions
-// WHEN I enter a description, installation instructions, usage information, contribution guidelines, and test instructions
-
 const questions = [
-    { name: 'github_username'   , type: 'input' , message: `What is your ${c('GitHub')} username?` }        , 
-    { name: 'email'             , type: 'input' , message: `What is your ${c('Email')} address?` }          , 
-    { name: 'project_name'      , type: 'input' , message: `What is your ${c('Project name')}?` }           , 
-    { name: 'description'       , type: 'input' , message: `${c('Describe')} your Project:` }               , 
+    { name: 'github_username'   , type: 'input' , message: `What is your ${c('GitHub')} username?\n` }        , 
+    { name: 'email'             , type: 'input' , message: `What is your ${c('Email')} address?\n` }          , 
+    { name: 'project_name'      , type: 'input' , message: `What is your ${c('Project name')}?\n` }           , 
+    { name: 'description'       , type: 'input' , message: `${c('Describe')} your Project:\n` }               , 
     { name: 'features'          , type: 'list'  , message: `Do you need a ${c('Features')} section?`        , choices: ['yes' , 'no'] } ,
     { name: 'technologies'      , type: 'list'  , message: `Do you need a ${c('Technologies')} section?`    , choices: ['yes', 'no'] } ,
     { name: 'getting_started'   , type: 'list'  , message: `Do you need a ${c('Getting Started')} section?` , choices: ['yes' , 'no'] } ,
-    { name: 'installation'       , type: 'input' , message: `${c('Installation instructions')}:` }  ,
-    { name: 'usage'             , type: 'input' , message: `${c('Usage information')}:` }  ,
+    { name: 'installation', type: 'list' , message: `Do you need ${c('Installation instructions')}?`, default: true, choices: ['yes' , 'no'] },
+    { name: 'install_commands', type: 'input', message: `What are the ${('Commands to Install?')} ${('(separate with Semicolon ";")')}:\n`, 
+        when: (answers) => answers.installation 
+    },
+    { name: 'usage', type: 'list' , message: `Do you need ${c('Usage instructions')}?`, default: true, choices: ['yes' , 'no'] },
+    { name: 'usage_commands', type: 'input', message: `What are the ${('Commands to Use the project?')} ${('(separate with Semicolon ";")')}:\n`, 
+        when: (answers) => answers.usage 
+    },
     { name: 'questions'         , type: 'list'  , message: `Do you need a ${c('Questions')} section?`       , choices: ['yes' , 'no'] } ,
-    { name: 'contribution'      , type: 'input' , message: `${c('Contributions')}:` } ,
-    { name: 'test_instructions' , type: 'input' , message: `${c('Test Instructions')}:` } ,
+    { name: 'contribution'      , type: 'input' , message: `${c('Contributions')}:\n` } ,
+    { name: 'test_instructions', type: 'list' , message: `Do you need ${c('Test instructions')}?`, default: true, choices: ['yes' , 'no'] },
+    { name: 'usage_commands', type: 'input', message: `What are the ${('Commands to Test the project?')} ${('(separate with Semicolon ";")')}:\n`,
+        when: (answers) => answers.test_instructions
+    },
     { name: 'acknowledgments'   , type: 'list'  , message: `Do you need a ${c('Acknowledgments')} section?` , choices: ['yes' , 'no'] } ,
     { type: 'list' , message: c('License type:'), name: 'license', title: 'License' , 
-        choices: [...Object.keys(badges), c("No License Section -----",'y') ] 
+        choices: [c("No License Section -----",'y'), ...Object.keys(badges) ] 
     },
 ]
 
@@ -69,7 +75,8 @@ function writeToFile(fileName, data) {
     fs.writeFile(`./output/${fileName}`, markdown, (err) => {
         if(err) { console.log(`Error: ${err}`) } 
         else {
-            console.log(c(`creating file: ${c(fileName,'y')}`));
+            console.log(c(`created file: ${c(fileName,'y')}`));
+            fileCreated = true
         }
     })
 }
@@ -102,7 +109,6 @@ async function init(input = '') {
     // inquiring to create file
     inquirer.prompt(defaultQuestions)
     .then((res) => {
-        
         let response = (mode === 'Default') ? defaultValues : res
         writeToFile('README.md', JSON.stringify(response, null, 2)) 
     })
@@ -111,5 +117,35 @@ async function init(input = '') {
 // Function call to initialize app
 const input = process.argv[2]
 init(input)
+
+async function askQuestions() {
+    const questions = [
+        {
+            type: 'confirm',
+            name: 'addProjectSection',
+            message: 'Do you need a project section?',
+            default: false
+        },
+        {
+            type: 'input',
+            name: 'sectionName',
+            message: 'What is the name of the section?',
+            // This question will only be asked if the previous answer was 'yes' (true)
+            when: (answers) => answers.addProjectSection
+        },
+        {
+            type: 'input',
+            name: 'nextQuestion',
+            message: 'What is your next step?',
+            // This question is always asked, regardless of previous answers
+        }
+    ];
+
+    const answers = await inquirer.prompt(questions);
+    console.log(answers);
+}
+
+// askQuestions();
+
 
 
