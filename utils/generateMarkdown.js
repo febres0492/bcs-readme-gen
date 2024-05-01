@@ -32,6 +32,38 @@ const badges = {
 }
 
 
+// creating fallbacks
+let fallbacks = {
+    project_name: 'My Project',
+    github_username: 'Example123',
+    email: 'Example123@gmail.com',
+    description: 'This is a description \nLorem sed voluptua voluptua sit diam lorem, clita sadipscing et nonumy vero dolore eos sit et, takimata sanctus takimata et est aliquyam et. Sea et sed consetetur ea amet sit amet at sit, consetetur ut est et et takimata lorem.', 
+    features: `\n- **Features 1:** Lorem sed voluptua voluptua sit diam lorem,. \n- **Features 2:** Lorem sed voluptua voluptua sit diam lorem,. \n- **Features 3:** Lorem sed voluptua voluptua sit diam lorem,`, 
+    technologies: `Technologies used: \n- **HTML** \n- **css** \n- **Javascript**`, 
+    installation_commands: 'git clone https://github.com/[github_username]/[project_name].git; cd [project_name]',
+    installation: {
+        templateType: 'code', 
+        instructions: 'Follow these steps to get your development environment set up:', 
+        code: `[installation_commands]`
+    }, 
+    usage_commands: 'npm run start',
+    usage: {
+        templateType: 'code', 
+        instructions: 'Follow these steps to get your development environment set up:', 
+        code: `[usage_commands]`
+    }, 
+    test_commands: 'npm run test',
+    test_instructions: {
+        templateType: 'code', 
+        instructions: 'Follow these steps to get your development environment set up:', 
+        code: '[test_commands]'
+    }, 
+    contribution: 'Contributions are welcome',
+    acknowledgments: 'Thank you to all contributors',
+    questions: `Please email me at [email] or contact me on [github_username]`,
+    license: 'MIT',
+}
+
 //  ------------------------------------------------------------------------------------------------------------------------------
 // TODO: Create a function that returns a license badge based on which license is passed in
 // If there is no license, return an empty string
@@ -63,52 +95,20 @@ function renderLicenseSection(key, license) {
 // TODO: Create a function to generate markdown for README
 function generateMarkdown(data) {
 
-    // creating fallbacks
-    const fallbacks = {
-        project_name: 'My Project',
-        github_username: 'Example123',
-        email: 'Example123@gmail.com',
-        description: 'This is a description \nLorem sed voluptua voluptua sit diam lorem, clita sadipscing et nonumy vero dolore eos sit et, takimata sanctus takimata et est aliquyam et. Sea et sed consetetur ea amet sit amet at sit, consetetur ut est et et takimata lorem.', 
-        features: `\n- **Features 1:** Lorem sed voluptua voluptua sit diam lorem,. \n- **Features 2:** Lorem sed voluptua voluptua sit diam lorem,. \n- **Features 3:** Lorem sed voluptua voluptua sit diam lorem,`, 
-        technologies: `Technologies used: \n- **HTML** \n- **css** \n- **Javascript**`, 
-        installation: {
-            templateType: 'code', 
-            instructions: 'Follow these steps to get your development environment set up:', 
-            code: `git clone https://github.com/[github_username]/[project_name].git \ncd [project_name]`
-        }, 
-        usage: {
-            templateType: 'code', 
-            instructions: 'Follow these steps to get your development environment set up:', 
-            code: 'npm start'
-        }, 
-        test_instructions: {
-            templateType: 'code', 
-            instructions: 'Follow these steps to get your development environment set up:', 
-            code: 'npm test'
-        }, 
-        contribution: 'Contributions are welcome',
-        acknowledgments: 'Thank you to all contributors',
-        questions: `Please email me at ${fortmatInput(data.email, 'Example123@gmail.com')}`,
-        license: 'MIT',
-    }
+    data.test_commands = 'fdsaf;fdsf  ;fdsfsdf;f'
+    
+    // console.log(ln(), data)
+    fallbacks = replacingPlaceHolders(fallbacks, fallbacks)
 
     data.author = fortmatInput(data.github_username, fallbacks.github_username),
 
     // formatting data and setting fallbacks
-    Object.entries(data).forEach(([key, val]) => {
-        if(typeof val != 'string') return
-        data[key] = fortmatInput(data[key], fallbacks[key])
-    })
+    settingFallbacks(data)
 
-    // replacing [placeholders] in the data
-    let dataStr = JSON.stringify(data, null, 2)
-    const regex = /\[([^\[\]]+)\]/g;
-    dataStr = dataStr.replace(regex, (match, varName) => {
-        return varName in data ? data[varName] : varName;
-    })
-    data = JSON.parse(dataStr)
+    // replacing [placeholders] with values
+    data = replacingPlaceHolders(data, fallbacks)
 
-    console.log(ln(),data)
+    // console.log(ln(),data)
 
     // setting sections order
     const sections = [ 
@@ -117,7 +117,7 @@ function generateMarkdown(data) {
     ]
 
     // createing table_of_content links
-    data.table_of_content = createTableContent(data, sections)
+    createTableContent(data, sections)
 
     const templates = {
         description: (key, val) => {
@@ -134,7 +134,6 @@ function generateMarkdown(data) {
         },
         getting_started: (key, val) => `## Getting Started 
             \nThis section will guide you through setting up the project locally. By the end of this guide, you will have a working version of [Project Name] running on your machine.
-
             \n### Prerequisites
             \nBefore you begin, ensure you have the following installed:
             \n- [Node.js](https://nodejs.org/) (v14.0 or later)
@@ -146,7 +145,7 @@ function generateMarkdown(data) {
         code: (key, val) => {
             const instructions = val.instructions || 'Follow these steps to get your development environment set up: \n1. Clone the repository:'
             const code = val.code || 'git clone'
-            return`## ${formatTitle(key)} \n${instructions} \n\`\`\`bash \n${code} \n\`\`\` `
+            return`## ${formatTitle(key)} \n${instructions} \n\`\`\`bash ${formatCodeStr(code)} \n\`\`\` `
         },
 
         license: (key, val) => {
@@ -176,16 +175,46 @@ function generateMarkdown(data) {
     return Object.values(markdown).join('')
 }
 
+function formatCodeStr(str){
+    return str.split(';').reduce((acc, cur) => acc + '\n' + cur.trim(), '')
+}
+
+function replacingPlaceHolders(obj, fallback) {
+    let objStr = JSON.stringify(obj, null, 2)
+    const regex = /\[([^\[\]]+)\]/g
+    objStr = objStr.replace(regex, (match, key) => {
+        if(key.indexOf('command') > -1 && obj[key] == 'yes'){
+            console.log(ln(), key, obj[key], fallback[key])
+            return fallback[key]
+        }
+        return key in obj ? obj[key] : key
+    })
+    return JSON.parse(objStr)
+}
+
+function settingFallbacks(data) {
+    return Object.entries(data).forEach(([key, val]) => {
+        if (typeof val != 'string') return
+        if(key.indexOf('command') > -1) return
+        data[key] = fortmatInput(data[key], fallbacks[key])
+    })
+}
+
 function createTableContent(data, sections) {
+    // cheching if sections if an array
+    if (!Array.isArray(sections)){
+        console.error('sections must be an array')
+        return
+    }
     const table_of_content = []
-    Object.keys(data).forEach(key => {
+    sections.forEach(key => {
         if (key == 'description') return
-        if (sections.includes(key)) {
+        if (key in data) {
             const link = `- [${formatTitle(key)}](#${key.replace('_', '-')})`
             table_of_content.push(link)
         }
     })
-    return table_of_content
+    data.table_of_content = table_of_content
 }
 
 function fortmatInput(val, falback){

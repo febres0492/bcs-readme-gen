@@ -10,6 +10,8 @@ function c(str, color = 'g'){
     return colors[opt[color]](str) 
 }
 
+const separate = c('separate with Semicolon','y')
+
 // TODO: Create an array of questions for user input
 const questions = [
     { name: 'github_username'   , type: 'input' , message: `What is your ${c('GitHub')} username?\n` }        , 
@@ -20,17 +22,17 @@ const questions = [
     { name: 'technologies'      , type: 'list'  , message: `Do you need a ${c('Technologies')} section?`    , choices: ['yes', 'no'] } ,
     { name: 'getting_started'   , type: 'list'  , message: `Do you need a ${c('Getting Started')} section?` , choices: ['yes' , 'no'] } ,
     { name: 'installation', type: 'list' , message: `Do you need ${c('Installation instructions')}?`, default: true, choices: ['yes' , 'no'] },
-    { name: 'install_commands', type: 'input', message: `What are the ${('Commands to Install?')} ${('(separate with Semicolon ";")')}:\n`, 
+    { name: 'installation_commands', type: 'input', message: `What are the ${c('Commands to Install?')} ${separate}:\n`, 
         when: (answers) => answers.installation 
     },
     { name: 'usage', type: 'list' , message: `Do you need ${c('Usage instructions')}?`, default: true, choices: ['yes' , 'no'] },
-    { name: 'usage_commands', type: 'input', message: `What are the ${('Commands to Use the project?')} ${('(separate with Semicolon ";")')}:\n`, 
+    { name: 'usage_commands', type: 'input', message: `What are the ${c('Commands to Use the project?')} ${separate}:\n`, 
         when: (answers) => answers.usage 
     },
     { name: 'questions'         , type: 'list'  , message: `Do you need a ${c('Questions')} section?`       , choices: ['yes' , 'no'] } ,
-    { name: 'contribution'      , type: 'input' , message: `${c('Contributions')}:\n` } ,
+    { name: 'contribution'      , type: 'input' , message: `${c('List Contributions')} ${separate}:\n` } ,
     { name: 'test_instructions', type: 'list' , message: `Do you need ${c('Test instructions')}?`, default: true, choices: ['yes' , 'no'] },
-    { name: 'usage_commands', type: 'input', message: `What are the ${('Commands to Test the project?')} ${('(separate with Semicolon ";")')}:\n`,
+    { name: 'test_commands', type: 'input', message: `What are the ${c('Commands to Test the project?')} ${separate}:\n`,
         when: (answers) => answers.test_instructions
     },
     { name: 'acknowledgments'   , type: 'list'  , message: `Do you need a ${c('Acknowledgments')} section?` , choices: ['yes' , 'no'] } ,
@@ -117,35 +119,3 @@ async function init(input = '') {
 // Function call to initialize app
 const input = process.argv[2]
 init(input)
-
-async function askQuestions() {
-    const questions = [
-        {
-            type: 'confirm',
-            name: 'addProjectSection',
-            message: 'Do you need a project section?',
-            default: false
-        },
-        {
-            type: 'input',
-            name: 'sectionName',
-            message: 'What is the name of the section?',
-            // This question will only be asked if the previous answer was 'yes' (true)
-            when: (answers) => answers.addProjectSection
-        },
-        {
-            type: 'input',
-            name: 'nextQuestion',
-            message: 'What is your next step?',
-            // This question is always asked, regardless of previous answers
-        }
-    ];
-
-    const answers = await inquirer.prompt(questions);
-    console.log(answers);
-}
-
-// askQuestions();
-
-
-
