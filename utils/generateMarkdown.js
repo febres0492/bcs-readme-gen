@@ -95,20 +95,11 @@ function renderLicenseSection(key, license) {
 // TODO: Create a function to generate markdown for README
 function generateMarkdown(data) {
 
-    data.test_commands = 'fdsaf;fdsf  ;fdsfsdf;f'
-    
-    // console.log(ln(), data)
-    fallbacks = replacingPlaceHolders(fallbacks, fallbacks)
-
+    // setting author
     data.author = fortmatInput(data.github_username, fallbacks.github_username),
 
     // formatting data and setting fallbacks
-    settingFallbacks(data)
-
-    // replacing [placeholders] with values
-    data = replacingPlaceHolders(data, fallbacks)
-
-    // console.log(ln(),data)
+    data = settingFallbacks(data)
 
     // setting sections order
     const sections = [ 
@@ -160,18 +151,21 @@ function generateMarkdown(data) {
         markdown[item] = ''
         const value = data[item]
         
+        // checking if the item is a template
         if(Object.keys(templates).includes(item)) {
             markdown[item] += templates[item](item, value) + '\n\n\n'
             return
         }
 
+        // checking if the item is a code template
         if(typeof value == 'object' && 'templateType' in value && value.templateType == 'code'){
             markdown[item] += templates['code'](item, value) + '\n\n\n'
             return
         }
+
+        // setting default template
         markdown[item] += templates['default'](item, value) + '\n\n\n'
     })
-
     return Object.values(markdown).join('')
 }
 
@@ -182,22 +176,26 @@ function formatCodeStr(str){
 function replacingPlaceHolders(obj, fallback) {
     let objStr = JSON.stringify(obj, null, 2)
     const regex = /\[([^\[\]]+)\]/g
+
+    // replacing placeholders with value
     objStr = objStr.replace(regex, (match, key) => {
-        if(key.indexOf('command') > -1 && obj[key] == 'yes'){
-            console.log(ln(), key, obj[key], fallback[key])
-            return fallback[key]
-        }
-        return key in obj ? obj[key] : key
+        // this is replacing the placeholder with the value if newVal has a placeholder within it
+        const newVal = obj[key].replace(regex, (m, k)=> obj[k])
+        return newVal
     })
+
     return JSON.parse(objStr)
 }
 
 function settingFallbacks(data) {
-    return Object.entries(data).forEach(([key, val]) => {
+    Object.entries(data).forEach(([key, val]) => {
         if (typeof val != 'string') return
-        if(key.indexOf('command') > -1) return
-        data[key] = fortmatInput(data[key], fallbacks[key])
+        let capitalize = key.indexOf('command') < 0
+        data[key] = fortmatInput(data[key], fallbacks[key], {'cap':capitalize})
     })
+
+    data = replacingPlaceHolders(data, fallbacks)
+    return data
 }
 
 function createTableContent(data, sections) {
@@ -217,8 +215,11 @@ function createTableContent(data, sections) {
     data.table_of_content = table_of_content
 }
 
-function fortmatInput(val, falback){
-    return (val == 'yes' || val == '') ? capFirst(falback) : capFirst(val)
+function fortmatInput(val, falback, obj = {cap:true}){
+    if(obj.cap){
+        return (val == 'yes' || val == '') ? capFirst(falback) : capFirst(val)
+    }
+    return (val == 'yes' || val == '') ? falback : val
 }
 
 function capFirst(str){

@@ -10,7 +10,7 @@ function c(str, color = 'g'){
     return colors[opt[color]](str) 
 }
 
-const separate = c('separate with Semicolon','y')
+const separate = c('separate with Semicolon (;)','y')
 
 // TODO: Create an array of questions for user input
 const questions = [
