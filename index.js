@@ -29,8 +29,9 @@ const questions = [
     { name: 'usage_commands', type: 'input', message: `What are the ${c('Commands to Use the project?')} ${separate}:\n`, 
         when: (answers) => answers.usage === 'yes'
     },
-    { name: 'questions'         , type: 'list'  , message: `Do you need a ${c('Questions')} section?`       , choices: ['yes' , 'no'] } ,
-    { name: 'contribution'      , type: 'input' , message: `${c('List Contributors')} ${separate}:\n` } ,
+    { name: 'questions' , type: 'list'  , message: `Do you need a ${c('Questions')} section?`       , choices: ['yes' , 'no'] } ,
+    { name: 'contribution_guidelines' , type: 'input'  , message: `${c('Contribution guidelines')}?\n` } ,
+    { name: 'contribution' , type: 'input' , message: `${c('List Contributors')} ${separate}:\n` } ,
     { name: 'test_instructions', type: 'list' , message: `Do you need ${c('Test instructions')}?`, default: true, choices: ['yes' , 'no'] },
     { name: 'test_commands', type: 'input', message: `What are the ${c('Commands to Test the project?')} ${separate}:\n`,
         when: (answers) => answers.test_instructions === 'yes'
@@ -43,10 +44,11 @@ const questions = [
 
 // TODO: Create a function to write README file
 function writeToFile(fileName, data) {
-    data = JSON.parse(data)
+    // data = JSON.parse(data)
     const fs = require('fs')
     fileName = 'README.md' 
     let createFile = false
+    let i = -1
 
     // checing if the file exists and updating the file name
     while(createFile === false ) {
@@ -64,6 +66,7 @@ function writeToFile(fileName, data) {
 
             createFile = true
         }
+        i++
     }
 
     if(createFile === false) { return }
@@ -76,7 +79,8 @@ function writeToFile(fileName, data) {
         if(err) { console.log(`Error: ${err}`) } 
         else {
             console.log(c(`created file: ${c(fileName,'y')}`));
-            console.log(c(`\n${markdown}`))
+            console.log(c(`File saved in: ${c('./output/','y')}`));
+            console.log(`To open Alt + click: ${c(`./output/${fileName}`)}`);
         }
     })
 }
@@ -110,7 +114,7 @@ async function init() {
     inquirer.prompt(defaultQuestions)
     .then((res) => {
         let response = (mode === 'Default') ? defaultValues : res
-        writeToFile('README.md', JSON.stringify(response, null, 2)) 
+        writeToFile('README.md', response) 
     })
 }
 

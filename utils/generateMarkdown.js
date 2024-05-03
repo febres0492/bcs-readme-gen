@@ -1,5 +1,6 @@
 
 const badges = {
+    MIT: {          segment: "MIT-yellow.svg",                url: "https://opensource.org/licenses/MIT" } ,
     Apache_2: {     segment: "Apache_2.0-blue.svg",           url: "https://opensource.org/licenses/Apache-2.0" },
     Boost_1: {      segment: "Boost_1.0-lightblue.svg",       url: "https://www.boost.org/LICENSE_1_0.txt" } ,
     BSD_3: {        segment: "BSD_3--Clause-blue.svg",        url: "https://opensource.org/licenses/BSD-3-Clause" }   ,
@@ -16,7 +17,6 @@ const badges = {
     Hippocratic_3: {segment: "Hippocratic_3.0-lightgrey.svg", url: "https://firstdonoharm.dev" } ,
     IPL_1: {        segment: "IPL_1.0-blue.svg",              url: "https://opensource.org/licenses/IPL-1.0" } ,
     ISC: {          segment: "ISC-blue.svg",                  url: "https://opensource.org/licenses/ISC" } ,
-    MIT: {          segment: "MIT-yellow.svg",                url: "https://opensource.org/licenses/MIT" } ,
     MPL_2: {        segment: "MPL_2.0-brightgreen.svg",       url: "https://opensource.org/licenses/MPL-2.0" } ,
     ODC_BY: {       segment: "ODC_BY-brightgreen.svg",        url: "https://opendatacommons.org/licenses/by/" }  ,
     ODbL: {         segment: "ODbL-brightgreen.svg",          url: "https://opendatacommons.org/licenses/odbl/" } ,
@@ -36,26 +36,27 @@ let fallbacks = {
     email: 'Example123@gmail.com',
     description: 'This is a description \nLorem sed voluptua voluptua sit diam lorem, clita sadipscing et nonumy vero dolore eos sit et, takimata sanctus takimata et est aliquyam et. Sea et sed consetetur ea amet sit amet at sit, consetetur ut est et et takimata lorem.', 
     features: `\n- **Features 1:** Lorem sed voluptua voluptua sit diam lorem,. \n- **Features 2:** Lorem sed voluptua voluptua sit diam lorem,. \n- **Features 3:** Lorem sed voluptua voluptua sit diam lorem,`, 
-    technologies: `Technologies used: \n- **HTML** \n- **css** \n- **Javascript**`, 
+    technologies: `Technologies used: \n- **Item 1** \n- **Item 2** \n- **Item 3**`, 
     installation_commands: 'git clone https://github.com/[github_username]/[project_name].git; cd [project_name]',
     installation: {
         templateType: 'code', 
         instructions: 'Follow these steps to get your development environment set up:', 
         code: `[installation_commands]`
     }, 
-    usage_commands: 'npm run start',
+    usage_commands: 'npm start',
     usage: {
         templateType: 'code', 
         instructions: 'Follow these steps to get your development environment set up:', 
         code: `[usage_commands]`
     }, 
-    test_commands: 'npm run test',
+    test_commands: 'npm test',
     test_instructions: {
         templateType: 'code', 
         instructions: 'Follow these steps to get your development environment set up:', 
         code: '[test_commands]'
     }, 
     contribution: 'Contributions are welcome',
+    contribution_guidelines: 'Please get in contant for details on our code of conduct, and the process for submitting pull requests to us.',
     acknowledgments: 'Thank you to all contributors',
     questions: `Please email me at [email]`,
     license: 'MIT',
@@ -90,22 +91,22 @@ function renderLicenseSection(key, license) {
 
 // TODO: Create a function to generate markdown for README
 function generateMarkdown(data) {
-
+    
     // deleting unnecessary data
     Object.keys(data).forEach(key => (data[key] == 'no') && delete data[key])
-
+    
     const intialData = {...data}
-
+    
     // setting author
     data.author = setFallback(data.github_username, fallbacks.github_username),
-
+    
     // formatting data and setting fallbacks
     data = settingFallbacks(data)
 
     // setting sections order
     const sections = [ 
         'description', 'table_of_content', 'features', 'technologies', 'getting_started', 
-        'installation', 'usage', 'test_instructions', 'questions', 'author', 'contribution', 'acknowledgments', 'license',
+        'installation', 'usage', 'test_instructions', 'author', 'contribution', 'acknowledgments', 'contribution_guidelines', 'questions', 'license',
     ]
 
     // createing table_of_content links
@@ -126,7 +127,7 @@ function generateMarkdown(data) {
         },
 
         getting_started: (key, val) => `## Getting Started 
-            \nThis section will guide you through setting up the project locally. By the end of this guide, you will have a working version of [Project Name] running on your machine.
+            \nThis section will guide you through setting up the project locally. By the end of this guide, you will have a working version of ${data.project_name} running on your machine.
             \n### Prerequisites
             \nBefore you begin, ensure you have the following installed:
             \n- [Node.js](https://nodejs.org/) (v14.0 or later)
@@ -178,9 +179,14 @@ function formatCodeStr(str){
     return str.split(';').reduce((acc, cur) => acc + '\n' + cur.trim(), '')
 }
 
-function replacingPlaceHolders(obj, fallback) {
+function replacingPlaceHolders(obj) {
+
     let objStr = JSON.stringify(obj, null, 2)
     const regex = /\[([^\[\]]+)\]/g
+
+    // console.log('196', Object.keys(obj))
+    // console.log('196', objStr)
+
 
     // replacing placeholders with value
     objStr = objStr.replace(regex, (match, key) => {
@@ -193,16 +199,17 @@ function replacingPlaceHolders(obj, fallback) {
 }
 
 function settingFallbacks(data) {
+    console.log(c('contribution_guidelines ','r'),data.contribution_guidelines)
     Object.entries(data).forEach(([key, val]) => {
-
         if (typeof val != 'string') return
-
-        data[key] = setFallback(data[key], fallbacks[key])
-
+        
+        data[key] = setFallback(data[key], fallbacks[key] || data[key])
+        
         let capitalize = key.indexOf('command') < 0
         data[key] = capitalize ? capFirst(data[key]) : data[key]
     })
 
+    // console.log('settingFallbacks', data.contribution_guidelines)
     return replacingPlaceHolders(data, fallbacks)
 }
 
@@ -213,7 +220,7 @@ function setFallback(val, falback){
 function createTableContent(data, sections) {
     // cheching if sections is an array
     if (!Array.isArray(sections)){
-        console.error(ln(),'sections must be an array')
+        console.error('sections must be an array')
         return
     }
     const table_of_content = []
@@ -240,18 +247,10 @@ function c(str, color = 'g'){
     return colors[opt[color]](str) 
 }
 
-// this function is to get line number in the file when logging
-function ln() {
-    const e = new Error()
-    const frame = e.stack.split("\n")[2]
-    const lineNumber = frame.match(/:(\d+):\d+\)?$/)[1]
-    return c(`line ${lineNumber}`,'r')
-}
-
 function formatTitle(str){
     str = str.split('_')
     str = str.map(s=>s[0].toUpperCase() + s.slice(1))
     return str.join(' ')
 }
 
-module.exports = { generateMarkdown, badges, ln }
+module.exports = { generateMarkdown, badges}
