@@ -47,12 +47,9 @@ function writeToFile(fileName, data) {
     const fs = require('fs')
     fileName = 'README.md' 
     let createFile = false
-    let i = -1
-    let fileAmountLimit = 100
 
     // checing if the file exists and updating the file name
-    while(createFile === false && i < fileAmountLimit) {
-        if(i === fileAmountLimit) { console.log(c('File limit reached. clear the output folder to create more files','r')); break }
+    while(createFile === false ) {
         try {
             let subfix = `_${i}`
             fileName = i === -1 ? 'README.md' : `README${subfix}.md`
@@ -67,10 +64,11 @@ function writeToFile(fileName, data) {
 
             createFile = true
         }
-        i++
     }
 
-    // generating markdown
+    if(createFile === false) { return }
+
+    // generating 
     const markdown = generateMarkdown(data)
 
     // writing to file
@@ -78,13 +76,13 @@ function writeToFile(fileName, data) {
         if(err) { console.log(`Error: ${err}`) } 
         else {
             console.log(c(`created file: ${c(fileName,'y')}`));
-            fileCreated = true
+            console.log(c(`\n${markdown}`))
         }
     })
 }
 
 // TODO: Create a function to initialize app
-async function init(input = '') {
+async function init() {
     let defaultQuestions = questions
     let defaultValues = {}
     let mode = ''
@@ -117,5 +115,4 @@ async function init(input = '') {
 }
 
 // Function call to initialize app
-const input = process.argv[2]
-init(input)
+init()

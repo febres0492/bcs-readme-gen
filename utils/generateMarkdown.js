@@ -97,7 +97,7 @@ function generateMarkdown(data) {
     const intialData = {...data}
 
     // setting author
-    data.author = fortmatInput(data.github_username, fallbacks.github_username),
+    data.author = setFallback(data.github_username, fallbacks.github_username),
 
     // formatting data and setting fallbacks
     data = settingFallbacks(data)
@@ -194,13 +194,20 @@ function replacingPlaceHolders(obj, fallback) {
 
 function settingFallbacks(data) {
     Object.entries(data).forEach(([key, val]) => {
+
         if (typeof val != 'string') return
+
+        data[key] = setFallback(data[key], fallbacks[key])
+
         let capitalize = key.indexOf('command') < 0
-        data[key] = fortmatInput(data[key], fallbacks[key], {'cap':capitalize})
+        data[key] = capitalize ? capFirst(data[key]) : data[key]
     })
 
-    data = replacingPlaceHolders(data, fallbacks)
-    return data
+    return replacingPlaceHolders(data, fallbacks)
+}
+
+function setFallback(val, falback){
+    return (val == 'yes' || val == '') ? falback : val
 }
 
 function createTableContent(data, sections) {
@@ -219,13 +226,6 @@ function createTableContent(data, sections) {
         }
     })
     data.table_of_content = table_of_content
-}
-
-function fortmatInput(val, falback, obj = {cap:true}){
-    if(obj.cap){
-        return (val == 'yes' || val == '') ? capFirst(falback) : capFirst(val)
-    }
-    return (val == 'yes' || val == '') ? falback : val
 }
 
 function capFirst(str){
