@@ -23,17 +23,17 @@ const questions = [
     { name: 'getting_started'   , type: 'list'  , message: `Do you need a ${c('Getting Started')} section?` , choices: ['yes' , 'no'] } ,
     { name: 'installation', type: 'list' , message: `Do you need ${c('Installation instructions')}?`, default: true, choices: ['yes' , 'no'] },
     { name: 'installation_commands', type: 'input', message: `What are the ${c('Commands to Install?')} ${separate}:\n`, 
-        when: (answers) => answers.installation 
+        when: (answers) => answers.installation === 'yes'
     },
     { name: 'usage', type: 'list' , message: `Do you need ${c('Usage instructions')}?`, default: true, choices: ['yes' , 'no'] },
     { name: 'usage_commands', type: 'input', message: `What are the ${c('Commands to Use the project?')} ${separate}:\n`, 
-        when: (answers) => answers.usage 
+        when: (answers) => answers.usage === 'yes'
     },
     { name: 'questions'         , type: 'list'  , message: `Do you need a ${c('Questions')} section?`       , choices: ['yes' , 'no'] } ,
-    { name: 'contribution'      , type: 'input' , message: `${c('List Contributions')} ${separate}:\n` } ,
+    { name: 'contribution'      , type: 'input' , message: `${c('List Contributors')} ${separate}:\n` } ,
     { name: 'test_instructions', type: 'list' , message: `Do you need ${c('Test instructions')}?`, default: true, choices: ['yes' , 'no'] },
     { name: 'test_commands', type: 'input', message: `What are the ${c('Commands to Test the project?')} ${separate}:\n`,
-        when: (answers) => answers.test_instructions
+        when: (answers) => answers.test_instructions === 'yes'
     },
     { name: 'acknowledgments'   , type: 'list'  , message: `Do you need a ${c('Acknowledgments')} section?` , choices: ['yes' , 'no'] } ,
     { type: 'list' , message: c('License type:'), name: 'license', title: 'License' , 

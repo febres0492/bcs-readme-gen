@@ -91,6 +91,9 @@ function renderLicenseSection(key, license) {
 // TODO: Create a function to generate markdown for README
 function generateMarkdown(data) {
 
+    // deleting unnecessary data
+    Object.keys(data).forEach(key => (data[key] == 'no') && delete data[key])
+
     const intialData = {...data}
 
     // setting author
@@ -148,7 +151,6 @@ function generateMarkdown(data) {
     // creating markdown
     let markdown = {}
     sections.forEach( item => {
-        console.log(ln(), c(intialData[item]), value)
         if(intialData[item] == 'no') return
         const value = data[item]
 
@@ -210,6 +212,10 @@ function createTableContent(data, sections) {
     const table_of_content = []
     sections.forEach(key => {
         if (key == 'description') return
+        console.log(ln(), key, data[key])
+        if(key in data && data[key] == 'no') {
+            return
+        }
         if (key in data) {
             const link = `- [${formatTitle(key)}](#${key.replace('_', '-')})`
             table_of_content.push(link)
