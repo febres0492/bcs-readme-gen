@@ -1,5 +1,3 @@
-// TODO: Create a function that returns a license badge based on which license is passed in
-// If there is no license, return an empty string
 
 const badges = {
     Apache_2: {     segment: "Apache_2.0-blue.svg",           url: "https://opensource.org/licenses/Apache-2.0" },
@@ -31,7 +29,6 @@ const badges = {
     Zlib: {         segment: "Zlib-lightgrey.svg",            url: "https://opensource.org/licenses/Zlib" }    ,
 }
 
-
 // creating fallbacks
 let fallbacks = {
     project_name: 'My Project',
@@ -60,11 +57,10 @@ let fallbacks = {
     }, 
     contribution: 'Contributions are welcome',
     acknowledgments: 'Thank you to all contributors',
-    questions: `Please email me at [email] or contact me on [github_username]`,
+    questions: `Please email me at [email]`,
     license: 'MIT',
 }
 
-//  ------------------------------------------------------------------------------------------------------------------------------
 // TODO: Create a function that returns a license badge based on which license is passed in
 // If there is no license, return an empty string
 function renderLicenseBadge(segment) {  
@@ -95,6 +91,8 @@ function renderLicenseSection(key, license) {
 // TODO: Create a function to generate markdown for README
 function generateMarkdown(data) {
 
+    const intialData = {...data}
+
     // setting author
     data.author = fortmatInput(data.github_username, fallbacks.github_username),
 
@@ -123,6 +121,7 @@ function generateMarkdown(data) {
             const links = val.reduce((acc, cur)=> acc + `\n${cur}`,'')
             return `## Table of Content ${links}`
         },
+
         getting_started: (key, val) => `## Getting Started 
             \nThis section will guide you through setting up the project locally. By the end of this guide, you will have a working version of [Project Name] running on your machine.
             \n### Prerequisites
@@ -131,6 +130,7 @@ function generateMarkdown(data) {
             \n- [Git](https://git-scm.com/)
             \n- A text editor like [VSCode](https://code.visualstudio.com/)
         `,
+
         default: (key, val) => `## ${formatTitle(key)} \n${val}`,
 
         code: (key, val) => {
@@ -148,8 +148,11 @@ function generateMarkdown(data) {
     // creating markdown
     let markdown = {}
     sections.forEach( item => {
-        markdown[item] = ''
+        console.log(ln(), c(intialData[item]), value)
+        if(intialData[item] == 'no') return
         const value = data[item]
+
+        markdown[item] = ''
         
         // checking if the item is a template
         if(Object.keys(templates).includes(item)) {
