@@ -37,7 +37,7 @@ let fallbacks = {
     description: 'This is a description \nLorem sed voluptua voluptua sit diam lorem, clita sadipscing et nonumy vero dolore eos sit et, takimata sanctus takimata et est aliquyam et. Sea et sed consetetur ea amet sit amet at sit, consetetur ut est et et takimata lorem.', 
     features: `\n- **Features 1:** Lorem sed voluptua voluptua sit diam lorem,. \n- **Features 2:** Lorem sed voluptua voluptua sit diam lorem,. \n- **Features 3:** Lorem sed voluptua voluptua sit diam lorem,`, 
     technologies: `Technologies used: \n- **Item 1** \n- **Item 2** \n- **Item 3**`, 
-    installation_commands: 'git clone https://github.com/[github_username]/[project_name].git; cd [project_name]',
+    installation_commands: 'git clone https://github.com/[github_username]/[project_name].git; cd [project_name]; npm install',
     installation: {
         templateType: 'code', 
         instructions: 'Follow these steps to get your development environment set up:', 
@@ -58,7 +58,7 @@ let fallbacks = {
     contribution: 'Contributions are welcome',
     contribution_guidelines: 'Please get in contant for details on our code of conduct, and the process for submitting pull requests to us.',
     acknowledgments: 'Thank you to all contributors',
-    questions: `Please email me at [email]`,
+    questions: `For questions please get in contant.  \nGithub Profile: https://github.com/[github_username]  \nEmail: [email]`,
     license: 'MIT',
 }
 
