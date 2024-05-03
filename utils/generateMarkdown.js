@@ -204,18 +204,15 @@ function settingFallbacks(data) {
 }
 
 function createTableContent(data, sections) {
-    // cheching if sections if an array
+    // cheching if sections is an array
     if (!Array.isArray(sections)){
-        console.error('sections must be an array')
+        console.error(ln(),'sections must be an array')
         return
     }
     const table_of_content = []
     sections.forEach(key => {
         if (key == 'description') return
-        console.log(ln(), key, data[key])
-        if(key in data && data[key] == 'no') {
-            return
-        }
+        if (key in data && data[key] == 'no') { return }
         if (key in data) {
             const link = `- [${formatTitle(key)}](#${key.replace('_', '-')})`
             table_of_content.push(link)
@@ -236,12 +233,14 @@ function capFirst(str){
     return str[0].toUpperCase() + str.slice(1)
 }
 
+// this function is to color the console.log
 function c(str, color = 'g'){ 
     const colors = require('colors')
     const opt = { r: 'red', g: 'green', y: 'yellow', b: 'blue' }
     return colors[opt[color]](str) 
 }
 
+// this function is to get line number in the file when logging
 function ln() {
     const e = new Error()
     const frame = e.stack.split("\n")[2]
