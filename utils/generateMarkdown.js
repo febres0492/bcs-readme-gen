@@ -184,10 +184,6 @@ function replacingPlaceHolders(obj) {
     let objStr = JSON.stringify(obj, null, 2)
     const regex = /\[([^\[\]]+)\]/g
 
-    // console.log('196', Object.keys(obj))
-    // console.log('196', objStr)
-
-
     // replacing placeholders with value
     objStr = objStr.replace(regex, (match, key) => {
         // this is replacing the placeholder with the value if newVal has a placeholder within it
@@ -199,7 +195,6 @@ function replacingPlaceHolders(obj) {
 }
 
 function settingFallbacks(data) {
-    console.log(c('contribution_guidelines ','r'),data.contribution_guidelines)
     Object.entries(data).forEach(([key, val]) => {
         if (typeof val != 'string') return
         
@@ -209,7 +204,6 @@ function settingFallbacks(data) {
         data[key] = capitalize ? capFirst(data[key]) : data[key]
     })
 
-    // console.log('settingFallbacks', data.contribution_guidelines)
     return replacingPlaceHolders(data, fallbacks)
 }
 
