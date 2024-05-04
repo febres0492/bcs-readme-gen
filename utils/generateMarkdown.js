@@ -31,6 +31,7 @@ const badges = {
 
 // creating fallbacks
 let fallbacks = {
+    author: 'Your Name',
     project_name: 'My Project',
     github_username: 'Example123',
     email: 'Example123@gmail.com',
@@ -91,18 +92,14 @@ function renderLicenseSection(key, license) {
 
 // TODO: Create a function to generate markdown for README
 function generateMarkdown(data) {
-    
+
     // deleting unnecessary data
     Object.keys(data).forEach(key => (data[key] == 'no') && delete data[key])
     
     const intialData = {...data}
     
-    // setting author
-    data.author = setFallback(data.github_username, fallbacks.github_username),
-    
     // formatting data and setting fallbacks
     data = settingFallbacks(data)
-
 
     // setting sections order
     const sections = [ 
@@ -111,7 +108,7 @@ function generateMarkdown(data) {
     ]
 
     // createing table_of_content links
-    createTableContent(data, sections)
+    data.table_of_content = createTableContent(data, sections)
 
     const templates = {
         description: (key, val) => {
@@ -154,7 +151,8 @@ function generateMarkdown(data) {
     // creating markdown
     let markdown = {}
     sections.forEach( item => {
-        if(intialData[item] == 'no') return
+        const keys = Object.keys(data)
+        if(!keys.includes(item)  || intialData[item] == 'no'){return}
         const value = data[item]
 
         markdown[item] = ''
@@ -230,7 +228,7 @@ function createTableContent(data, sections) {
             table_of_content.push(link)
         }
     })
-    data.table_of_content = table_of_content
+    return table_of_content
 }
 
 function capFirst(str){

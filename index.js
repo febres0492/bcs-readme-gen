@@ -14,6 +14,7 @@ const separate = c('separate with Semicolon (;)','y')
 
 // TODO: Create an array of questions for user input
 const questions = [
+    { name: 'author'            , type: 'input' , message: `What is your ${c('Name')}?\n` }, 
     { name: 'github_username'   , type: 'input' , message: `What is your ${c('GitHub')} username?\n` }        , 
     { name: 'email'             , type: 'input' , message: `What is your ${c('Email')} address?\n` }          , 
     { name: 'project_name'      , type: 'input' , message: `What is your ${c('Project name')}?\n` }           , 
