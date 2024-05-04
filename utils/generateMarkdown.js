@@ -91,7 +91,6 @@ function renderLicenseSection(key, license) {
 
 // TODO: Create a function to generate markdown for README
 function generateMarkdown(data) {
-    data.installation_commands = '[fdsfds]'
     
     // deleting unnecessary data
     Object.keys(data).forEach(key => (data[key] == 'no') && delete data[key])
