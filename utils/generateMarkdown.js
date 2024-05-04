@@ -91,6 +91,7 @@ function renderLicenseSection(key, license) {
 
 // TODO: Create a function to generate markdown for README
 function generateMarkdown(data) {
+    data.installation_commands = '[fdsfds]'
     
     // deleting unnecessary data
     Object.keys(data).forEach(key => (data[key] == 'no') && delete data[key])
@@ -102,6 +103,7 @@ function generateMarkdown(data) {
     
     // formatting data and setting fallbacks
     data = settingFallbacks(data)
+
 
     // setting sections order
     const sections = [ 
@@ -138,6 +140,7 @@ function generateMarkdown(data) {
         default: (key, val) => `## ${formatTitle(key)} \n${val}`,
 
         code: (key, val) => {
+            console.log('key', key, 'val', val)
             const instructions = val.instructions || 'Follow these steps to get your development environment set up: \n1. Clone the repository:'
             const code = val.code || 'git clone'
             return`## ${formatTitle(key)} \n${instructions} \n\`\`\`bash ${formatCodeStr(code)} \n\`\`\` `
@@ -188,11 +191,11 @@ function replacingPlaceHolders(obj) {
     objStr = objStr.replace(regex, (match, key) => {
         // this is replacing the placeholder with the value if newVal has a placeholder within it
         if(key in obj) {
-            const newVal = obj[key].replace(regex, (m, k)=> obj[k])
+            let newVal = obj[key].replace(regex, (m, k)=> obj[k])
+            newVal = newVal == 'undefined' ? obj[key] : newVal
             return newVal
         }
     })
-
     return JSON.parse(objStr)
 }
 
