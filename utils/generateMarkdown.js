@@ -47,13 +47,13 @@ let fallbacks = {
     usage_commands: 'npm start',
     usage: {
         templateType: 'code', 
-        instructions: 'Follow these steps to get your development environment set up:', 
+        instructions: 'Follow these steps:', 
         code: `[usage_commands]`
     }, 
     test_commands: 'npm test',
     test_instructions: {
         templateType: 'code', 
-        instructions: 'Follow these steps to get your development environment set up:', 
+        instructions: 'Follow these steps:', 
         code: '[test_commands]'
     }, 
     contribution: 'Contributions are welcome',

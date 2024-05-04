@@ -31,17 +31,14 @@ Application is live at: https://example.com
 
 ## Technologies 
 Technologies used: 
-- **Item 1** 
-- **Item 2** 
-- **Item 3**
+- **Node Js** 
 
 
 ## Getting Started 
-            
 This section will guide you through setting up the project locally. By the end of this guide, you will have a working version of Bcs Readme Gen running on your machine.
-            
+
+
 ### Prerequisites
-            
 Before you begin, ensure you have the following installed:
             
 - [Node.js](https://nodejs.org/) (v14.0 or later)
