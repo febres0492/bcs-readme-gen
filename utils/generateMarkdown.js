@@ -187,8 +187,10 @@ function replacingPlaceHolders(obj) {
     // replacing placeholders with value
     objStr = objStr.replace(regex, (match, key) => {
         // this is replacing the placeholder with the value if newVal has a placeholder within it
-        const newVal = obj[key].replace(regex, (m, k)=> obj[k])
-        return newVal
+        if(key in obj) {
+            const newVal = obj[key].replace(regex, (m, k)=> obj[k])
+            return newVal
+        }
     })
 
     return JSON.parse(objStr)
