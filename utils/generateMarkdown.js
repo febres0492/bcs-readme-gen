@@ -136,7 +136,6 @@ function generateMarkdown(data) {
         default: (key, val) => `## ${formatTitle(key)} \n${val}`,
 
         code: (key, val) => {
-            console.log('key', key, 'val', val)
             const instructions = val.instructions || 'Follow these steps to get your development environment set up: \n1. Clone the repository:'
             const code = val.code || 'git clone'
             return`## ${formatTitle(key)} \n${instructions} \n\`\`\`bash ${formatCodeStr(code)} \n\`\`\` `

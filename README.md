@@ -6,7 +6,7 @@
             
 A Professional Readme Generator 
             
-Application is live at: https://example.com 
+Live Demo Video: https://drive.google.com/file/d/1Bcm6yIdz8GbYaJXlQ3BBNxgFeZeTsKFv/view
 
 
 ## Table of Content 
@@ -24,9 +24,8 @@ Application is live at: https://example.com
 
 ## Features 
 
-- **Features 1:** Lorem sed voluptua voluptua sit diam lorem,. 
-- **Features 2:** Lorem sed voluptua voluptua sit diam lorem,. 
-- **Features 3:** Lorem sed voluptua voluptua sit diam lorem,
+- **Default Mode:** For quick file genenration. 
+- **Personalized Mode:** For more customization. 
 
 
 ## Technologies 
@@ -35,7 +34,7 @@ Technologies used:
 
 
 ## Getting Started 
-This section will guide you through setting up the project locally. By the end of this guide, you will have a working version of Bcs Readme Gen running on your machine.
+This section will guide you through setting up the project locally.
 
 
 ### Prerequisites
@@ -46,7 +45,6 @@ Before you begin, ensure you have the following installed:
 - [Git](https://git-scm.com/)
             
 - A text editor like [VSCode](https://code.visualstudio.com/)
-        
 
 
 ## Installation 
@@ -58,9 +56,14 @@ npm install
 
 
 ## Usage 
-Follow these steps to get your development environment set up: 
+Run one of the following commands to use the script:
+
 ```bash 
 npm start 
+``` 
+or
+```bash 
+node index.js
 ``` 
 
 
@@ -73,7 +76,7 @@ Contributions are welcome
 
 
 ## Questions 
-For questions please get in contant.  
+For questions please get in contant:
 Github Profile: https://github.com/Febres0492  
 Email: Febres0492@gmail.com
 
