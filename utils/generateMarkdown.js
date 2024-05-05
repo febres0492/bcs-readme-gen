@@ -235,13 +235,6 @@ function capFirst(str){
     return str[0].toUpperCase() + str.slice(1)
 }
 
-// this function is to color the console.log
-function c(str, color = 'g'){ 
-    const colors = require('colors')
-    const opt = { r: 'red', g: 'green', y: 'yellow', b: 'blue' }
-    return colors[opt[color]](str) 
-}
-
 function formatTitle(str){
     str = str.split('_')
     str = str.map(s=>s[0].toUpperCase() + s.slice(1))
