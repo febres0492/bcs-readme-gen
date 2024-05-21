@@ -87,10 +87,6 @@ function renderLicenseSection(key, license) {
     return `## License  
     \n[![License](${badge})]${link}
     \nThis project is licensed under the ${license} License - see the [LICENSE]${link} for details.
-
-    \n[![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen?style=for-the-badge&logo=appveyor&logoColor=white&labelColor=blue&cacheSeconds=3600)](https://example.com)
-
-    \n[![License](https://img.shields.io/badge/MIT-green?style=for-the-badge)](https://opensource.org/licenses/MIT)
     `
 }
 
